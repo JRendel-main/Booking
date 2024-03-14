@@ -47,6 +47,7 @@ if ($error) {
                 <h1>Create Account</h1>
                 <input type="text" id="first_name" name="first_name" required="required" placeholder="First Name" />
                 <input type="text" id="last_name" name="last_name" required="required" placeholder="Last Name" />
+                <input type="text" id="address" name="address" required placeholder="Address" />
                 <input type="email" id="email" name="email" required="required" placeholder="Email" />
                 <input type="number" id="cont_no" name="cont_no" required="required" placeholder="Contact Number" />
                 <input type="password" id="password" name="password" required="required" placeholder="Password" />

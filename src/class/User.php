@@ -8,12 +8,12 @@ class User
         $this->db = $db;
     }
 
-    public function createUser($first_name, $last_name, $email, $cont_no, $password)
+    public function createUser($first_name, $last_name, $address, $email, $cont_no, $password)
     {
         $conn = $this->db->getConnection();
 
         // check if email already exists
-        $sql = "SELECT * FROM user WHERE email_address = '$email'";
+        $sql = "SELECT * FROM guests WHERE Email = '$email'";
         $result = $conn->query($sql);
         if ($result->num_rows > 0) {
             return false;
@@ -21,7 +21,7 @@ class User
 
         // hash the password before saving to database
         $password = password_hash($password, PASSWORD_DEFAULT);
-        $sql = "INSERT INTO user (first_name, last_name, email_address, contact_no, password) VALUES ('$first_name', '$last_name', '$email', '$cont_no', '$password')";
+        $sql = "INSERT INTO guests (FirstName, LastName, Address, Email, Phone, password) VALUES ('$first_name', '$last_name', '$address', '$email', '$cont_no', '$password')";
 
         if ($conn->query($sql) === TRUE) {
             return true;
@@ -34,7 +34,7 @@ class User
     {
         $conn = $this->db->getConnection();
 
-        $sql = "SELECT * FROM user WHERE email_address ='$email'";
+        $sql = "SELECT * FROM guests WHERE Email ='$email'";
 
         $result = $conn->query($sql);
 
@@ -51,12 +51,12 @@ class User
     {
         $conn = $this->db->getConnection();
 
-        $sql = "SELECT * FROM user WHERE email_address ='$email'";
+        $sql = "SELECT * FROM guests WHERE Email ='$email'";
         $result = $conn->query($sql);
 
         if ($result->num_rows > 0) {
             $row = $result->fetch_assoc();
-            return $row['id'];
+            return $row['GuestID'];
         } else {
             return null;
         }
@@ -71,12 +71,12 @@ class User
     {
         $conn = $this->db->getConnection();
 
-        $sql = "SELECT * FROM users WHERE email = '$email'";
+        $sql = "SELECT * FROM guests WHERE Email = '$email'";
         $result = $conn->query($sql);
 
         if ($result->num_rows > 0) {
             $row = $result->fetch_assoc();
-            $fullname = $row["first_name"] . " " . $row["lastname"];
+            $fullname = $row["FirstName"] . " " . $row["LastName    "];
             // capitalize fullname
             $fullname = ucwords($fullname);
 
