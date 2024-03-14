@@ -1,5 +1,5 @@
 <header>
-    <nav class="navbar navbar-expand-lg navbar-light w-100 bg-light mainNavbar">
+    <nav class="navbar navbar-expand-lg navbar-light w-100 bg-light mainNavbar fixed-top">
         <div class="container">
             <a class="navbar-brand" href="#">Villa Delos Reyes</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"

@@ -1,134 +1,61 @@
 <?php
+include '../../includes/autoloader.php';
 
-// Connect to MySQL
-$host = "localhost";
-$user = "root";
-$password = "";
-$database = "booking";
+include '../../includes/conn.php';
 
-$conn = mysqli_connect($host, $user, $password, $database);
-
-// Check connection
-if (!$conn) {
-  die("Connection failed: " . mysqli_connect_error());
-}
-
-$email = $_SESSION['email'];
-$sql = "SELECT * FROM user WHERE email_address = '$email'";
-$result = mysqli_query($conn, $sql);
-$row = mysqli_fetch_assoc($result);
+$conn = new conn();
+$session = new session();
+include 'includes/header.php';
+include 'includes/navbar.php';
 ?>
-<!DOCTYPE html>
-<html>
-
-<head>
-    <title>About</title>
-    <style>
-    /* CSS for the About page */
-    body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 0;
-        background-image: url("pool side.jpg");
-        background-size: cover;
-    }
-
-    .containerr {
-        max-width: 800px;
-        margin: 0 auto;
-        margin-top: 100px;
-        padding: 20px;
-        background-color: aliceblue;
-        justify-content: center;
-    }
-
-    h1 {
-        font-size: 24px;
-        margin-bottom: 20px;
-    }
-
-    p {
-        margin-bottom: 10px;
-    }
-
-    .map-container {
-        margin-top: 20px;
-    }
-
-    .map-container iframe {
-        width: 100%;
-        height: 450px;
-        border: 0;
-    }
-
-    .contacts {
-        margin-top: 20px;
-        margin: 0 auto;
-        display: inline-block;
-        justify-content: center;
-    }
-    </style>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!--TAB TITLE-->
-    <title>INCLUSIONS</title>
-
-    <!--TAB ICON-->
-    <link rel="icon" type="image/jpg" href="favicon.png" />
-
-    <!-- Google fonts-->
-    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
-    <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700" rel="stylesheet" type="text/css" />
-
-    <!--CSS / JS-->
-    <script src="https://kit.fontawesome.com/ff8e777e2d.js" crossorigin="anonymous"></script>
-    <!--ICON RESOURCES-->
-    <link href="styles2.css" rel="stylesheet" />
-
-</head>
 
 <body>
-    <div class="mainNav">
+    <div class="container">
+        <style>
+        /* CSS for the About page */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url("pool side.jpg");
+            background-size: cover;
+        }
 
-        <!--WEBSITE PAGES-->
-        <ul>
-            <li><a href="home.php">Home</a></li>
-            <li><a href="gallery.php">Gallery</a></li>
-            <li><a href="offers.php">Offers</a></li>
-            <li><a href="about.php">About</a></li>
-            <li><a href="viewfeedbacks.php">Feedbacks</a></li>
-        </ul>
+        .containerr {
+            max-width: 800px;
+            margin: 0 auto;
+            margin-top: 100px;
+            padding: 20px;
+            background-color: aliceblue;
+            justify-content: center;
+        }
 
-        <div class="button-checkbox-container">
-            <!-- BRAND LOGO-->
-            <a href="home.php">
-                <div class="logo">VILLA DELOS REYES
-                </div>
-                <!-- TEXT LOGO
-              <img src="logo2.png" alt="">   
-               IMAGE LOGO -->
-            </a>
-        </div>
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
 
+        p {
+            margin-bottom: 10px;
+        }
 
+        .map-container {
+            margin-top: 20px;
+        }
 
-        <div class="button-container">
+        .map-container iframe {
+            width: 100%;
+            height: 450px;
+            border: 0;
+        }
 
-            <!--BOOK BUTTON-->
-            <a href="#" id="button" class="button">Book Now</a>
-
-            <label style="color:white;">Hi,
-                <?php echo $row['first_name']; ?>
-            </label>
-
-            <!--LOGOUT BUTTON-->
-            <a href="login.php">Log out</a>
-        </div>
-
-    </div>
-    </header>
-    <div class="containerr">
+        .contacts {
+            margin-top: 20px;
+            margin: 0 auto;
+            display: inline-block;
+            justify-content: center;
+        }
+        </style>
         <h1>About</h1>
         <p>Welcome to a luxurious hotel located in a beautiful destination. Our hotel offers top-notch amenities and
             services to ensure an unforgettable stay for our guests.</p>
