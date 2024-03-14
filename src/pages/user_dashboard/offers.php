@@ -1,30 +1,12 @@
 <?php
-// Start a session
-session_start();
+include '../../includes/autoloader.php';
 
-// If the user is not logged in, redirect to the login page
-if (!isset($_SESSION['loggedin'])) {
-  header("Location: login.php");
-  exit();
-}
+include '../../includes/conn.php';
 
-// Connect to MySQL
-$host = "localhost";
-$user = "root";
-$password = "";
-$database = "booking";
-
-$conn = mysqli_connect($host, $user, $password, $database);
-
-// Check connection
-if (!$conn) {
-  die("Connection failed: " . mysqli_connect_error());
-}
-
-$email = $_SESSION['email'];
-$sql = "SELECT * FROM user WHERE email_address = '$email'";
-$result = mysqli_query($conn, $sql);
-$row = mysqli_fetch_assoc($result);
+$conn = new conn();
+$session = new session();
+include 'includes/header.php';
+include 'includes/navbar.php';
 ?>
 <!DOCTYPE html>
 <html>
