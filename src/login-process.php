@@ -19,7 +19,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($session->get('user_id') == null) {
             header('Location: index.php?error=Invalid email or password');
         }
-        header('Location: pages/user_dashboard/index.php');
+        header('Location: pages/_dashboard/index.php');
     } else {
         header('Location: index.php?error=Invalid email or password');
     }

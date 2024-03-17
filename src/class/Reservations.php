@@ -19,4 +19,12 @@ class Reservations
         }
         return $reservations;
     }
+
+    public function getTotalReservations()
+    {
+        $query = "SELECT COUNT(*) as total_reservations FROM reservations";
+        $result = $this->conn->query($query);
+        $row = $result->fetch_assoc();
+        return $row['total_reservations'];
+    }
 }

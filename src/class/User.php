@@ -85,4 +85,31 @@ class User
             return null;
         }
     }
+
+    public function adminAuthenticate($email, $password)
+    {
+        $conn = $this->db->getConnection();
+
+        $sql = "SELECT * FROM admins WHERE Username  ='$email'";
+
+        $result = $conn->query($sql);
+
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            if ($password == $row['Password']) {
+                return $row['AdminID'];
+            } else {
+                return null;
+            }
+        }
+    }
+
+    public function getGuests($GuestID)
+    {
+        $conn = $this->db->getConnection();
+        $sql = "SELECT * FROM guests WHERE GuestID = '$GuestID'";
+        $result = $conn->query($sql);
+        $row = $result->fetch_assoc();
+        return $row;
+    }
 }

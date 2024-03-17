@@ -18,4 +18,9 @@ class Authentication
     {
         return $this->user->authenticate($email, $password);
     }
+
+    public function adminLogin($email, $password)
+    {
+        return $this->user->adminAuthenticate($email, $password);
+    }
 }

@@ -254,26 +254,67 @@ include 'includes/header.php';
                     <input type="hidden" id="selectedPackage">
                     <input type="hidden" id="selectedAddons">
 
-                    <div class="form-group">
-                        <label for="bankInfoImage">Bank Info Image:</label>
-                        <input type="file" class="form-control" id="bankInfoImage">
-                    </div>
-                    <div class="form-group">
-                        <label for="proofOfPayment">Proof of Payment:</label>
-                        <input type="file" class="form-control" id="proofOfPayment">
-                    </div>
-                    <div class="form-group">
-                        <label for="referenceNumber">Reference Number:</label>
-                        <input type="text" class="form-control" id="referenceNumber">
-                    </div>
-                    <div class="form-group">
-                        <label for="dateSent">Date Sent:</label>
-                        <input type="date" class="form-control" id="dateSent">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p>Send your payment here:</p>
+                            <img src="../../../samplepayment.jpg" alt="Bank Information" class="img-fluid"
+                                id="bankInfoImage" style="width:350px; height:400px;">
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="proofOfPayment">Proof of Payment:</label>
+                                <input type="file" class="form-control" id="proofOfPayment">
+                            </div>
+                            <div class="form-group">
+                                <label for="referenceNumber">Reference Number:</label>
+                                <input type="text" class="form-control" id="referenceNumber">
+                            </div>
+                            <div class="form-group">
+                                <label for="dateSent">Date Sent:</label>
+                                <input type="date" class="form-control" id="dateSent">
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-success" id="submitPayment">Submit Payment</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reciept modal -->
+    <div class="modal fade" id="recieptModal" tabindex="-1" role="dialog" aria-labelledby="recieptModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="recieptModalLabel">Payment Reciept</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h5>Thank you for booking with us! Here is your reciept:</h5>
+                            <p>Please wait for the confirmation of your booking. We will send you an email once your
+                                booking is confirmed.</p>
+
+                        </div>
+                    </div>
+                    <!-- Add total payment here -->
+                    <p>Booking Date: <span id="bookingDate"></span></p>
+                    <p>Booking Package: <span id="bookingPackage"></span></p>
+                    <div class="row" id="addons"></div>
+                    <p>Reference Number: <span id="bookingReferenceNumber"></span></p>
+                    <p>Date Sent: <span id="bookingDateSent"></span></p>
+                    <hr>
+                    <p>Total Cost: <span id="bookingCost"></span></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
@@ -297,7 +338,8 @@ include 'includes/header.php';
                         events.push({
                             title: 'Reserved',
                             start: d.CheckInDate,
-                            end: d.CheckOutDate
+                            end: d.CheckOutDate,
+                            color: 'red'
                         });
                     });
                     var calendarEl = document.getElementById('calendar');
@@ -310,13 +352,33 @@ include 'includes/header.php';
                         },
                         events: events,
                         dateClick: function (info) {
-                            $('#selectpackage').modal('show');
-                            $('#selectedDate').text(info.dateStr);
+                            var selectedDate = new Date(info.dateStr);
+                            var currentDate = new Date();
+                            currentDate.setHours(0, 0, 0, 0);
+
+                            if (selectedDate <= currentDate) {
+                                alert('You cannot reserve on a past or today\'s date.');
+                            } else {
+                                // Check if the selected date has a reservation
+                                var hasReservation = events.some(function (event) {
+                                    return event.start === info.dateStr;
+                                });
+
+                                if (hasReservation) {
+                                    alert('There is already a reservation on this date.');
+                                } else {
+                                    $('#selectedDate').text(info.dateStr);
+                                    $('#selectpackage').modal('show');
+                                }
+                            }
+                        },
+                        eventClick: function (info) {
+                            alert('Event: ' + info.event.title);
                         }
                     });
                     calendar.render();
                 }
-            })
+            });
 
             $('#policies').hide();
             $('#payment').hide();
@@ -365,18 +427,19 @@ include 'includes/header.php';
                 var selectedDate = $('#selectedDate').val();
                 var selectedPackage = $('#selectedPackage').val();
                 var selectedAddons = $('#selectedAddons').val();
-                var bankInfoImage = $('#bankInfoImage').prop('files')[0];
                 var proofOfPayment = $('#proofOfPayment').prop('files')[0];
                 var referenceNumber = $('#referenceNumber').val();
                 var dateSent = $('#dateSent').val();
                 var formData = new FormData();
+
                 formData.append('selectedDate', selectedDate);
                 formData.append('selectedPackage', selectedPackage);
                 formData.append('selectedAddons', selectedAddons);
-                formData.append('bankInfoImage', bankInfoImage);
                 formData.append('proofOfPayment', proofOfPayment);
                 formData.append('referenceNumber', referenceNumber);
                 formData.append('dateSent', dateSent);
+                formData.append('guestEmail', '<?php echo $session->get('email'); ?>');
+
                 $.ajax({
                     url: 'controllers/submitPayment.php',
                     type: 'POST',
@@ -384,8 +447,73 @@ include 'includes/header.php';
                     contentType: false,
                     processData: false,
                     success: function (res) {
-                        alert(res);
+                        console.log(res);
                     }
+                });
+
+                // open reciept modal
+                $('#paymentModal').modal('toggle');
+                $('#recieptModal').modal('show');
+
+                // add data to modal for reciept
+                // calculate the cost
+                var cost = 0;
+                if (selectedPackage == 'p1') {
+                    cost = 15000;
+                } else if (selectedPackage == 'p2') {
+                    cost = 18000;
+                } else if (selectedPackage == 'p3') {
+                    cost = 25000;
+                }
+
+                // add addons cost
+                if (selectedAddons.includes('Jacuzzi')) {
+                    cost += 300;
+                } else if (selectedAddons.includes('Gas Stove')) {
+                    cost += 250;
+                } else if (selectedAddons.includes('Dryer Machine')) {
+                    cost += 50;
+                } else if (selectedAddons.includes('Himalayan Charcoal')) {
+                    cost += 100;
+                } else if (selectedAddons.includes('Air Fryer')) {
+                    cost += 150;
+                }
+
+                // change the selected package to the actual package name
+                if (selectedPackage == 'p1') {
+                    selectedPackage = 'Day Stay';
+                } else if (selectedPackage == 'p2') {
+                    selectedPackage = 'Night Stay';
+                } else if (selectedPackage == 'p3') {
+                    selectedPackage = 'Overnight Stay';
+                }
+
+                // make the date readable
+                var date = new Date(selectedDate);
+                var options = {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                };
+                date = date.toLocaleDateString('en-US', options);
+
+                // add the data to the reciept modal
+                $('#bookingDate').text(date);
+                $('#bookingPackage').text(selectedPackage);
+                $('#bookingReferenceNumber').text(referenceNumber);
+                $('#bookingDateSent').text(dateSent);
+                $('#bookingCost').text('₱' + cost);
+
+                // add the addons to the reciept modal
+                var addons = '';
+                selectedAddons.forEach(function (addon) {
+                    addons += '<span>' + addon + '</span><br>';
+                });
+                $('#addons').html(addons);
+
+                // if modal closed, refresh the page
+                $('#recieptModal').on('hidden.bs.modal', function () {
+                    location.reload();
                 });
             });
         });
