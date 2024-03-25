@@ -29,6 +29,12 @@ foreach ($reservations as $reservation) {
     // make this readable
     $date = date('F j, Y', strtotime($date));
 
+    // make the contact number readable
+    $user_name['Phone'] = substr($user_name['Phone'], 0, 4) . ' ' . substr($user_name['Phone'], 4, 3) . ' ' . substr($user_name['Phone'], 7, 4);
+
+    // make the total amount readable and comma separated
+    $reservation['TotalAmount'] = number_format($reservation['TotalAmount'], 2);
+
     $reservationList[] = [
         "reservation_date" => $date,
         "package_name" => $package,

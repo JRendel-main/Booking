@@ -4,7 +4,7 @@ include '../../includes/autoloader.php';
 // check the session if the user is logged in
 $session = new Session();
 if ($session->get('email') != null) {
-    header('Location: pages/user_dashboard/index.php');
+    header('Location: ../index.php');
 }
 
 // check the error or success message
