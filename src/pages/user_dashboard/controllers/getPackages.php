@@ -5,7 +5,7 @@ $conn = new Database();
 $connection = $conn->getConnection();
 
 $packages = new Packages($connection);
-$packages = $packages->getPackages();
+$packages = $packages->getAllPackage();
 
 $packageList = [];
 
