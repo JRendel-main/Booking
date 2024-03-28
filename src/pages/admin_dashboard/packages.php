@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Admin Dashboard</title>
+    <title>Manage Package</title>
 
     <!-- Custom fonts for this template-->
     <link href="../../../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -29,7 +29,7 @@
     <!-- Page Wrapper -->
     <div id="wrapper">
         <!-- Sidebar -->
-        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+        <ul class="navbar-nav bg-gradient-secondary sidebar sidebar-dark accordion" id="accordionSidebar">
             <!-- Sidebar - Brand -->
             <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.php">
                 <div class="sidebar-brand-icon rotate-n-15">
@@ -115,18 +115,6 @@
                     </button>
 
                     <!-- Topbar Search -->
-                    <form
-                        class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-                        <div class="input-group">
-                            <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
-                                aria-label="Search" aria-describedby="basic-addon2">
-                            <div class="input-group-append">
-                                <button class="btn btn-primary" type="button">
-                                    <i class="fas fa-search fa-sm"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </form>
 
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
@@ -152,75 +140,6 @@
                                         </div>
                                     </div>
                                 </form>
-                            </div>
-                        </li>
-
-                        <!-- Nav Item - Alerts -->
-                        <li class="nav-item dropdown no-arrow mx-1">
-                            <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-bell fa-fw"></i>
-                                <!-- Counter - Alerts -->
-                                <span class="badge badge-danger badge-counter">3+</span>
-                            </a>
-                            <!-- Dropdown - Alerts -->
-                            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                aria-labelledby="alertsDropdown">
-                                <h6 class="dropdown-header">
-                                    Alerts Center
-                                </h6>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="mr-3">
-                                        <div class="icon-circle bg-primary">
-                                            <i class="fas fa-file-alt text-white"></i>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div class="small text-gray-500">December 12, 2019</div>
-                                        <span class="font-weight-bold">A new monthly report is ready to download!</span>
-                                    </div>
-                                </a>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="mr-3">
-                                        <div class="icon-circle bg-success">
-                                            <i class="fas fa-donate text-white"></i>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div class="small text-gray-500">December 7, 2019</div>
-                                        $290.29 has been deposited into your account!
-                                    </div>
-                                </a>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="mr-3">
-                                        <div class="icon-circle bg-warning">
-                                            <i class="fas fa-exclamation-triangle text-white"></i>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div class="small text-gray-500">December 2, 2019</div>
-                                        Spending Alert: We've noticed unusually high spending for your account.
-                                    </div>
-                                </a>
-                                <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
-                            </div>
-                        </li>
-
-                        <!-- Nav Item - Messages -->
-                        <li class="nav-item dropdown no-arrow mx-1">
-                            <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-envelope fa-fw"></i>
-                                <!-- Counter - Messages -->
-                                <span class="badge badge-danger badge-counter">7</span>
-                            </a>
-                            <!-- Dropdown - Messages -->
-                            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                aria-labelledby="messagesDropdown">
-                                <h6 class="dropdown-header">
-                                    Message Center
-                                </h6>
-
                             </div>
                         </li>
 
@@ -256,8 +175,14 @@
                     <div class="row">
                         <div class="container">
                             <!-- Page Heading -->
-                            <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                                <h1 class="h3 mb-0 text-gray-800">Package Manager</h1>
+                            <div class="d-sm-flex justify-content-between align-items-center mb-4">
+                                <h1 class="h3 mb-0 text-gray-800">Manage Packages</h1>
+                                <div class="d-flex">
+                                    <button class="btn btn-sm btn-success shadow-sm" data-toggle="modal"
+                                        data-target="#addPackageModal">
+                                        <i class=" fas fa-plus fa-sm text-white-50"></i> Add Package
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -267,15 +192,21 @@
                                 <div class="col-md-12">
                                     <div class="card">
                                         <div class="card-header">
-                                            <h6 class="m-0 font-weight-bold text-primary">Standard Package</h6>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <h6 class="m-0 font-weight-bold text-primary">Standard Package</h6>
+                                                </div>
+                                                <div class="col-md-6 text-right">
+
+                                                </div>
+                                            </div>
                                         </div>
                                         <div class="card-body">
                                             <div class="table-responsive">
-                                                <table class="table table-bordered" id="standard_package_list"
-                                                    width="100%" cellspacing="0">
-                                                    <thead>
+                                                <table class="table table-bordered table-striped table-hover"
+                                                    id="standard_package_list" width="100%" cellspacing="0">
+                                                    <thead class="thead-dark">
                                                         <tr>
-
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -286,19 +217,24 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
+                            <div class="row mt-auto">
                                 <div class="col-md-12">
                                     <div class="card">
                                         <div class="card-header">
-                                            <h6 class="m-0 font-weight-bold text-primary">Custom Package</h6>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <h6 class="m-0 font-weight-bold text-primary">Custom Package</h6>
+                                                </div>
+                                                <div class="col-md-6 text-right">
+                                                </div>
+                                            </div>
                                         </div>
                                         <div class="card-body">
-                                            <div class="table-responsive">
+                                            <div class="table-responsive table-striped">
                                                 <table class="table table-bordered" id="custom_package_list"
                                                     width="100%" cellspacing="0">
-                                                    <thead>
+                                                    <thead class="thead-dark">
                                                         <tr>
-
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -315,9 +251,6 @@
                 </div>
             </div>
             <!-- End of Main Content -->
-
-
-
             <!-- Footer -->
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
@@ -359,6 +292,47 @@
         </div>
     </div>
 
+    <!-- Add Package Modal-->
+    <div class="modal fade" id="addPackageModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Add Package</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="addPackageForm">
+                        <div class="form-group">
+                            <label for="packageType">Package Type</label>
+                            <select class="form-control" id="packageType" name="packageType">
+                                <option value="standard">Standard</option>
+                                <option value="custom">Custom</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="packageName">Package Name</label>
+                            <input type="text" class="form-control" id="packageName" name="packageName">
+                        </div>
+                        <div class="form-group">
+                            <label for="packageDescription">Package Description</label>
+                            <textarea class="form-control" id="packageDescription" name="packageDescription"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="packagePrice">Package Price</label>
+                            <input type="number" class="form-control" id="packagePrice" name="packagePrice">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <button class="btn btn-primary" type="button" id="addPackageBtn">Add Package</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Bootstrap core JavaScript-->
     <script src="../../../vendor/jquery/jquery.min.js"></script>

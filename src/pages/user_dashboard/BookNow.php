@@ -15,19 +15,19 @@ include 'includes/header.php';
 
 <!-- Bootstrap styles and custom styles -->
 <style>
-.schedule-card {
-    width: 100%;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    margin-top: 10vh;
-}
+    .schedule-card {
+        width: 100%;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        margin-top: 10vh;
+    }
 
-.rules {
-    text-align: left;
-    font-size: 14px;
-    line-height: 1.5;
-    margin-top: 10px;
-}
+    .rules {
+        text-align: left;
+        font-size: 14px;
+        line-height: 1.5;
+        margin-top: 10px;
+    }
 </style>
 
 <body>
@@ -337,202 +337,200 @@ include 'includes/header.php';
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js'></script>
 
     <script>
-    $(document).ready(function() {
-        $.ajax({
-            url: 'controllers/getReservations.php',
-            type: 'GET',
-            success: function(res) {
-                var data = JSON.parse(res);
-                var events = [];
-                data.forEach(function(d) {
-                    events.push({
-                        title: 'Reserved',
-                        start: d.CheckInDate,
-                        end: d.CheckOutDate,
-                        color: 'red'
+        $(document).ready(function () {
+            $.ajax({
+                url: 'controllers/getReservations.php',
+                type: 'GET',
+                success: function (res) {
+                    var data = JSON.parse(res);
+                    var events = [];
+                    data.forEach(function (d) {
+                        events.push({
+                            title: 'Reserved',
+                            start: d.CheckInDate,
+                            end: d.CheckOutDate,
+                            color: 'red'
+                        });
                     });
-                });
-                var calendarEl = document.getElementById('calendar');
-                var calendar = new FullCalendar.Calendar(calendarEl, {
-                    initialView: 'dayGridMonth',
-                    headerToolbar: {
-                        left: 'prev,next today',
-                        center: 'title',
-                        right: 'dayGridMonth,timeGridWeek,timeGridDay'
-                    },
-                    events: events,
-                    dateClick: function(info) {
-                        var selectedDate = new Date(info.dateStr);
-                        var currentDate = new Date();
-                        currentDate.setHours(0, 0, 0, 0);
+                    var calendarEl = document.getElementById('calendar');
+                    var calendar = new FullCalendar.Calendar(calendarEl, {
+                        initialView: 'dayGridMonth',
+                        headerToolbar: {
+                            left: 'prev,next today',
+                            center: 'title',
+                            right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                        },
+                        events: events,
+                        dateClick: function (info) {
+                            var selectedDate = new Date(info.dateStr);
+                            var currentDate = new Date();
+                            currentDate.setHours(0, 0, 0, 0);
 
-                        if (selectedDate <= currentDate) {
-                            alert('You cannot reserve on a past or today\'s date.');
-                        } else {
-                            // Check if the selected date has a reservation
-                            var hasReservation = events.some(function(event) {
-                                return event.start === info.dateStr;
-                            });
-
-                            if (hasReservation) {
-                                alert('There is already a reservation on this date.');
+                            if (selectedDate <= currentDate) {
+                                alert('You cannot reserve on a past or today\'s date.');
                             } else {
-                                $('#selectedDate').text(info.dateStr);
-                                $('#selectpackage').modal('show');
+                                // Check if the selected date has a reservation
+                                var hasReservation = events.some(function (event) {
+                                    return event.start === info.dateStr;
+                                });
+
+                                if (hasReservation) {
+                                    alert('There is already a reservation on this date.');
+                                } else {
+                                    $('#selectedDate').text(info.dateStr);
+                                    $('#selectpackage').modal('show');
+                                }
                             }
+                        },
+                        eventClick: function (info) {
+                            alert('Event: ' + info.event.title);
                         }
-                    },
-                    eventClick: function(info) {
-                        alert('Event: ' + info.event.title);
+                    });
+                    calendar.render();
+                }
+            });
+
+            $('#policies').hide();
+            $('#payment').hide();
+            // check what package is selected
+            $('#package').on('click', 'a', function (e) {
+                e.preventDefault();
+                var packageId = $(this).attr('id'); // Get the ID of the clicked package
+                $('#selectedPackage').val(packageId); // Set the selected package ID in the hidden input
+                $('#package').hide();
+                $('#policies').show();
+                $('#payment').show();
+                alert('Package ' + packageId + ' selected');
+            });
+
+
+            // when payment button is clicked, get package and date and addons
+            $('#payment').on('click', function () {
+                $('#selectpackage').modal('toggle');
+                var selectedDate = $('#selectedDate').text();
+                var selectedPackage = $('#selectedPackage').val();
+                var selectedAddons = [];
+                if ($('#addon1').is(':checked')) {
+                    selectedAddons.push('Jacuzzi');
+                }
+                if ($('#addon2').is(':checked')) {
+                    selectedAddons.push('Gas Stove');
+                }
+                if ($('#addon3').is(':checked')) {
+                    selectedAddons.push('Dryer Machine');
+                }
+                if ($('#addon4').is(':checked')) {
+                    selectedAddons.push('Himalayan Charcoal');
+                }
+                if ($('#addon5').is(':checked')) {
+                    selectedAddons.push('Air Fryer');
+                }
+                $('#selectedAddons').val(selectedAddons);
+                $('#selectedDate').val(selectedDate);
+                $('#selectedPackage').val(selectedPackage);
+                $('#selectedAddons').val(selectedAddons);
+                $('#selectmodal').modal('hide');
+                $('#paymentModal').modal('show');
+
+                $('#selectedAddons').val(JSON.stringify(selectedAddons));
+            });
+
+            $('#paymentModal').on('click', '#submitPayment', function () {
+                var selectedDate = $('#selectedDate').val();
+                var selectedPackage = $('#selectedPackage').val();
+                var selectedAddons = $('#selectedAddons').val();
+                var proofOfPayment = $('#proofOfPayment').prop('files')[0];
+                var referenceNumber = $('#referenceNumber').val();
+                var dateSent = $('#dateSent').val();
+                var formData = new FormData();
+
+                formData.append('selectedDate', selectedDate);
+                formData.append('selectedPackage', selectedPackage);
+                formData.append('selectedAddons', selectedAddons);
+                formData.append('proofOfPayment', proofOfPayment);
+                formData.append('referenceNumber', referenceNumber);
+                formData.append('dateSent', dateSent);
+                formData.append('guestEmail', '<?php echo $session->get('email'); ?>');
+
+                $.ajax({
+                    url: 'controllers/submitPayment.php',
+                    type: 'POST',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function (res) {
+                        console.log(res);
                     }
                 });
-                calendar.render();
-            }
-        });
 
-        $('#policies').hide();
-        $('#payment').hide();
-        // check what package is selected
-        $('#package').on('click', 'a', function(e) {
-            e.preventDefault();
-            var packageId = $(this).attr('id'); // Get the ID of the clicked package
-            $('#selectedPackage').val(packageId); // Set the selected package ID in the hidden input
-            $('#package').hide();
-            $('#policies').show();
-            $('#payment').show();
-            alert('Package ' + packageId + ' selected');
-        });
+                // open reciept modal
+                $('#paymentModal').modal('toggle');
+                $('#recieptModal').modal('show');
 
+                // add data to modal for reciept
+                // calculate the cost
 
-        // when payment button is clicked, get package and date and addons
-        $('#payment').on('click', function() {
-            $('#selectpackage').modal('toggle');
-            var selectedDate = $('#selectedDate').text();
-            var selectedPackage = $('#selectedPackage').val();
-            var selectedAddons = [];
-            if ($('#addon1').is(':checked')) {
-                selectedAddons.push('Jacuzzi');
-            }
-            if ($('#addon2').is(':checked')) {
-                selectedAddons.push('Gas Stove');
-            }
-            if ($('#addon3').is(':checked')) {
-                selectedAddons.push('Dryer Machine');
-            }
-            if ($('#addon4').is(':checked')) {
-                selectedAddons.push('Himalayan Charcoal');
-            }
-            if ($('#addon5').is(':checked')) {
-                selectedAddons.push('Air Fryer');
-            }
-            $('#selectedAddons').val(selectedAddons);
-            $('#selectedDate').val(selectedDate);
-            $('#selectedPackage').val(selectedPackage);
-            $('#selectedAddons').val(selectedAddons);
-            $('#selectmodal').modal('hide');
-            $('#paymentModal').modal('show');
+                var cost;
+                $.ajax({
+                    url: 'getCost.php',
+                    type: 'POST',
+                    data: {
+                        packageId: selectedPackage
+                    },
+                    success: function (res) {
+                        // parse json
+                        var package = JSON.parse(res);
+                        cost = package.Price;
 
-            $('#selectedAddons').val(JSON.stringify(selectedAddons));
-        });
+                        // convert to int
+                        cost = parseInt(cost);
 
-        $('#paymentModal').on('click', '#submitPayment', function() {
-            var selectedDate = $('#selectedDate').val();
-            var selectedPackage = $('#selectedPackage').val();
-            var selectedAddons = $('#selectedAddons').val();
-            var proofOfPayment = $('#proofOfPayment').prop('files')[0];
-            var referenceNumber = $('#referenceNumber').val();
-            var dateSent = $('#dateSent').val();
-            var formData = new FormData();
+                        // add addons cost
+                        if (selectedAddons.includes('Jacuzzi')) {
+                            cost += 300;
+                        } else if (selectedAddons.includes('Gas Stove')) {
+                            cost += 250;
+                        } else if (selectedAddons.includes('Dryer Machine')) {
+                            cost += 50;
+                        } else if (selectedAddons.includes('Himalayan Charcoal')) {
+                            cost += 100;
+                        } else if (selectedAddons.includes('Air Fryer')) {
+                            cost += 150;
+                        }
 
-            formData.append('selectedDate', selectedDate);
-            formData.append('selectedPackage', selectedPackage);
-            formData.append('selectedAddons', selectedAddons);
-            formData.append('proofOfPayment', proofOfPayment);
-            formData.append('referenceNumber', referenceNumber);
-            formData.append('dateSent', dateSent);
-            formData.append('guestEmail', '<?php echo $session->get('email'); ?>');
+                        // make the date readable
+                        var date = new Date(selectedDate);
+                        var options = {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric'
+                        };
+                        date = date.toLocaleDateString('en-US', options);
 
-            $.ajax({
-                url: 'controllers/submitPayment.php',
-                type: 'POST',
-                data: formData,
-                contentType: false,
-                processData: false,
-                success: function(res) {
-                    console.log(res);
-                }
-            });
+                        // add the data to the receipt modal
+                        $('#bookingDate').text(date);
+                        $('#bookingPackage').text(selectedPackage);
+                        $('#bookingReferenceNumber').text(referenceNumber);
+                        $('#bookingDateSent').text(dateSent);
+                        $('#bookingCost').text('₱' + cost);
 
-            // open reciept modal
-            $('#paymentModal').modal('toggle');
-            $('#recieptModal').modal('show');
+                        // add the addons to the receipt modal
+                        var addons = '';
+                        selectedAddons.forEach(function (addon) {
+                            addons += '<span>' + addon + '</span><br>';
+                        });
+                        $('#addons').html(addons);
 
-            // add data to modal for reciept
-            // calculate the cost
-
-            var cost;
-            $.ajax({
-                url: 'getCost.php',
-                type: 'POST',
-                data: {
-                    packageId: selectedPackage
-                },
-                success: function(res) {
-                    // parse json
-                    var package = JSON.parse(res);
-                    cost = package.Price;
-
-                    // convert to int
-                    cost = parseInt(cost);
-                    // add addons cost
-                    if (selectedAddons.includes('Jacuzzi')) {
-                        cost += 300;
-                    } else if (selectedAddons.includes('Gas Stove')) {
-                        cost += 250;
-                    } else if (selectedAddons.includes('Dryer Machine')) {
-                        cost += 50;
-                    } else if (selectedAddons.includes('Himalayan Charcoal')) {
-                        cost += 100;
-                    } else if (selectedAddons.includes('Air Fryer')) {
-                        cost += 150;
+                        // open receipt modal after processing data
+                        $('#recieptModal').modal('show');
+                    },
+                    error: function (xhr, status, error) {
+                        // handle error
+                        console.error("Error fetching cost:", error);
                     }
-
-
-                    console.log(cost);
-                    // make the date readable
-                    var date = new Date(selectedDate);
-                    var options = {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric'
-                    };
-                    date = date.toLocaleDateString('en-US', options);
-
-                    // add the data to the reciept modal
-                    $('#bookingDate').text(date);
-                    $('#bookingPackage').text(selectedPackage);
-                    $('#bookingReferenceNumber').text(referenceNumber);
-                    $('#bookingDateSent').text(dateSent);
-                    $('#bookingCost').text('₱' + cost);
-                    var selectedAddons = JSON.parse($('#selectedAddons').val());
-                    // add the addons to the reciept modal
-                    var addons = '';
-                    selectedAddons.forEach(function(addon) {
-                        addons += '<span>' + addon + '</span><br>';
-                    });
-                    $('#addons').html(addons);
-
-                    // if modal closed, refresh the page
-                    $('#recieptModal').on('hidden.bs.modal', function() {
-                        location.reload();
-                    });
-                }
+                });
             });
-
-
-
         });
-    });
     </script>
 
     <!-- Include Bootstrap JS -->

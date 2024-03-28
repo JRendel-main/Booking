@@ -25,16 +25,16 @@ class Payment
 
     public function calculateAmount($package, $addons)
     {
-        $totalAmount = 0;
-        if ($package == "p1") {
-            $amount = 15000;
-        } else if ($package == "p2") {
-            $amount = 18000;
-        } else if ($package == "p3") {
-            $amount = 25000;
+        $sql = "SELECT Price FROM packages WHERE PackageID = '$package'";
+        $result = $this->connection->query($sql);
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            $amount = $row['Price'];
         } else {
             $amount = 0;
         }
+
+        $totalAmount = 0;
 
         $jacuzzi = 300;
         $gas = 250;
@@ -73,24 +73,13 @@ class Payment
             $this->dateSent = $dateSent;
             $this->guestId = $GuestId;
 
+
             // check what package
-            $package = $this->selectedPackage;
-
-            if ($package == "p1") {
-                $package = 1;
-            } else if ($package == "p2") {
-                $package = 2;
-            } else if ($package == "p3") {
-                $package = 3;
-            } else {
-                $package = 0;
-            }
-
 
             $totalAmount = $this->calculateAmount($selectedPackage, $selectedAddons);
 
             $sql = "INSERT INTO reservations (GuestID, PackageID, CheckInDate, CheckOutDate, TotalAmount) 
-                    VALUES ('$GuestId', '$package', '$selectedDate', '$selectedDate', '$totalAmount')";
+                    VALUES ('$GuestId', '$selectedPackage', '$selectedDate', '$selectedDate', '$totalAmount')";
             if ($this->connection->query($sql) === TRUE) {
                 // Get the id
                 $reservationId = $this->connection->insert_id;

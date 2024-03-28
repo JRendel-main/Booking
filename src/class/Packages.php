@@ -67,4 +67,15 @@ class Packages
         }
         return json_encode($package);
     }
+
+    public function addPackage($packageName, $packagePrice, $packageDescription, $packageType)
+    {
+        $query = "INSERT INTO packages (PackageName, Price, Description, type) VALUES ('$packageName', '$packagePrice', '$packageDescription', '$packageType')";
+
+        if ($this->conn->query($query) === TRUE) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

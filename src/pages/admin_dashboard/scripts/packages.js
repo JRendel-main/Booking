@@ -68,4 +68,38 @@ $(document).ready(() => {
             });
         }
     })
+
+    // when the add package button is clicked on modal add package
+    $('#addPackageBtn').on('click', function () {
+        let package_name = $('#packageName').val();
+        let package_price = $('#packagePrice').val();
+        let package_description = $('#packageDescription').val();
+
+        // get the package_type from select option
+        let package_type = $('#packageType').val();
+
+        if (package_name == '' || package_price == '' || package_description == '') {
+            alert('Please fill all fields');
+        } else {
+            $.ajax({
+                url: 'controllers/addPackage.php',
+                type: 'POST',
+                data: {
+                    packageName: package_name,
+                    packagePrice: package_price,
+                    packageDescription: package_description,
+                    packageType: package_type
+                },
+                success: (response) => {
+                    var data = JSON.parse(response);
+                    if (data.status == 'success') {
+                        alert(data.message);
+                        location.reload();
+                    } else {
+                        alert(data.message);
+                    }
+                }
+            })
+        }
+    })
 })
