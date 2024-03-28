@@ -19,4 +19,16 @@ class getUser
         $row = $result->fetch_assoc();
         return $row['GuestId'];
     }
+
+    public function getUserbyId($id)
+    {
+        $sql = "SELECT * FROM guests WHERE GuestID = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $stmt->close();
+        $row = $result->fetch_assoc();
+        return $row;
+    }
 }

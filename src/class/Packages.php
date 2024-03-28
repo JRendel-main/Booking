@@ -78,4 +78,12 @@ class Packages
             return false;
         }
     }
+
+    public function getPackage($packageId)
+    {
+        $query = "SELECT PackageName FROM packages WHERE PackageID = '$packageId'";
+        $result = $this->conn->query($query);
+        $row = $result->fetch_assoc();
+        return $row['PackageName'];
+    }
 }

@@ -366,14 +366,40 @@
                     </div>
                     <div class="row">
                         <div class="col-md-12">
-                            <table id="reservationlist" class="display" style="width:100%">
-                                <thead>
-                                    <tr>
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="card-title">Reservation List</h5>
+                                </div>
+                                <div class="card-body">
+                                    <table id="reservationlist" class="display" style="width:100%">
+                                        <thead>
+                                            <tr>
 
-                                    </tr>
-                                </thead>
-                                <tbody></tbody>
-                            </table>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-lg-2">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="card-title">Pending Reservation</h5>
+                                </div>
+                                <div class="card-body">
+                                    <table id="pendingreservationlist" class="display" style="width:100%">
+                                        <thead>
+                                            <tr>
+
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -423,6 +449,54 @@
         </div>
     </div>
 
+    <!-- Details modal -->
+    <div class="modal fade" id="detailsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Reservation Details</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="reservationID">Reservation ID</label>
+                                <input type="text" class="form-control" id="reservationID" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="guestName">Guest Name</label>
+                                <input type="text" class="form-control" id="guestName" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="guestEmail">Guest Email</label>
+                                <input type="text" class="form-control" id="guestEmail" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="guestContact">Guest Contact</label>
+                                <input type="text" class="form-control" id="guestContact" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="selectedDate">Selected Date</label>
+                                <input type="text" class="form-control" id="selectedDate" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="selectedPackage">Selected Package</label>
+                                <input type="text" class="form-control" id="selectedPackage" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="totalPaid">Total Paid</label>
+                                <input type="text" class="form-control" id="totalPaid" readonly>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Bootstrap core JavaScript-->
     <script src="../../../vendor/jquery/jquery.min.js"></script>

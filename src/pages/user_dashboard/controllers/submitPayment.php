@@ -17,7 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $guestEmail = $_POST['guestEmail'];
 
         // Check if proof of payment file is uploaded
-        if (isset ($_FILES['proofOfPayment']) && $_FILES['proofOfPayment']['error'] === UPLOAD_ERR_OK) {
+        if (isset($_FILES['proofOfPayment']) && $_FILES['proofOfPayment']['error'] === UPLOAD_ERR_OK) {
             // Get the uploaded file details
             $proofOfPayment = $_FILES['proofOfPayment'];
             $amountPaid = 0;
@@ -33,7 +33,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
             // Submit the reservation
             $reservationID = $payment->submitReservation($selectedDate, $selectedPackage, $selectedAddons, $proofOfPayment, $referenceNumber, $dateSent, $GuestId);
-
             // Upload proof of payment
             $uploadProofOfPayment = $payment->uploadProofOfPayment($proofOfPayment);
 
@@ -44,7 +43,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
                 // Check if payment submission was successful
                 if ($submitPayment !== false) {
-                    echo json_encode(array("message" => "Payment submitted successfully", "success" => true));
+                    echo json_encode(array("message" => "Payment submitted successfully", "success" => true, "reservationID" => $reservationID));
                 } else {
                     throw new Exception("Failed to submit payment");
                 }

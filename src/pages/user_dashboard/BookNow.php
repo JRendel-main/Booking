@@ -5,6 +5,11 @@ include '../../includes/conn.php';
 $conn = new conn();
 $session = new session();
 include 'includes/header.php';
+
+$get_role = $session->get('role');
+if ($get_role != 'user') {
+    header('Location: ../../index.php');
+}
 ?>
 
 <!-- Include Bootstrap CSS -->

@@ -17,13 +17,8 @@ foreach ($reservations as $reservation) {
 
     $user_name = $user->getGuests($reservation['GuestID']);
     $fullname = $user_name['FirstName'] . ' ' . $user_name['LastName'];
-    if ($reservation['PackageID'] == 1) {
-        $package = 'Package 1';
-    } elseif ($reservation['PackageID'] == 2) {
-        $package = 'Package 2';
-    } elseif ($reservation['PackageID'] == 3) {
-        $package = 'Package 3';
-    }
+    $package = new Packages($connection);
+    $package = $package->getPackage($reservation['PackageID']);
 
     $date = $reservation['CheckInDate'];
     // make this readable
@@ -35,13 +30,27 @@ foreach ($reservations as $reservation) {
     // make the total amount readable and comma separated
     $reservation['TotalAmount'] = number_format($reservation['TotalAmount'], 2);
 
+    if ($reservation['status'] == 'pending') {
+        $badge = '<badge class="badge badge-pill badge-warning">Pending</badge>';
+    } elseif ($reservation['status'] == 'approved') {
+        $badge = '<badge class="badge badge-pill badge-success">Approved</badge>';
+    } elseif ($reservation['status'] == 'declined') {
+        $badge = '<badge class="badge badge-pill badge-danger">Declined</badge>';
+    }
+
+    // if the date is past the current date, change the badge to expired
+    if (strtotime($reservation['CheckInDate']) < strtotime(date('Y-m-d'))) {
+        $badge = '<badge class="badge badge-pill badge-info">Finished</badge>';
+    }
+
     $reservationList[] = [
+        "reservation_id" => $reservation['ReservationID'],
         "reservation_date" => $date,
         "package_name" => $package,
         "guest_name" => $fullname,
         "guest_contact" => $user_name['Phone'],
         "total_paid" => '₱ ' . $reservation['TotalAmount'],
-        "status" => '<badge class="badge badge-pill badge-success">Status</badge>'
+        "status" => $badge
     ];
 }
 

@@ -62,6 +62,8 @@ if ($error) {
                 <input type="password" id="password" name="password" placeholder="Password" />
                 <a href="#">Forgot your password?</a>
                 <button type="submit" value="Login">Sign In</button>
+                <!-- Admin login -->
+                <a href="pages/admin_dashboard/index.php">Admin Login</a>
             </form>
         </div>
         <div class="overlay-container">

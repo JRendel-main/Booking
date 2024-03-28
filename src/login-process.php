@@ -14,12 +14,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($loggingIn) {
         $session->set('email', $email);
         $session->set('user_id', $user->getUserId($email));
+        $session->set('role', 'user');
 
         // check if the user_id is null
         if ($session->get('user_id') == null) {
             header('Location: index.php?error=Invalid email or password');
         }
-        header('Location: pages/_dashboard/index.php');
+        header('Location: pages/user_dashboard/index.php');
     } else {
         header('Location: index.php?error=Invalid email or password');
     }

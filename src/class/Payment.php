@@ -73,13 +73,10 @@ class Payment
             $this->dateSent = $dateSent;
             $this->guestId = $GuestId;
 
-
-            // check what package
-
             $totalAmount = $this->calculateAmount($selectedPackage, $selectedAddons);
 
-            $sql = "INSERT INTO reservations (GuestID, PackageID, CheckInDate, CheckOutDate, TotalAmount) 
-                    VALUES ('$GuestId', '$selectedPackage', '$selectedDate', '$selectedDate', '$totalAmount')";
+            $sql = "INSERT INTO reservations (GuestID, PackageID, CheckInDate, CheckOutDate, TotalAmount, status) 
+                    VALUES ('$GuestId', '$selectedPackage', '$selectedDate', '$selectedDate', '$totalAmount', 'pending')";
             if ($this->connection->query($sql) === TRUE) {
                 // Get the id
                 $reservationId = $this->connection->insert_id;
@@ -166,11 +163,12 @@ class Payment
     }
     public function getTotalEarnings()
     {
-        $sql = "SELECT SUM(AmountPaid) as TotalEarnings FROM payments";
+        $sql = "SELECT SUM(a.AmountPaid) as TotalEarnings FROM payments a, reservations b WHERE b.status = 'approved'";
         $result = $this->connection->query($sql);
         if ($result->num_rows > 0) {
             $row = $result->fetch_assoc();
-            return $row['TotalEarnings'];
+            // convert to money format with peso sign
+            return '₱ ' . number_format($row['TotalEarnings'], 2);
         } else {
             return 0;
         }
