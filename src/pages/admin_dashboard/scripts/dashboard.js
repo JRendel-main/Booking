@@ -46,9 +46,8 @@ $(document).ready(function () {
 
     $(document).on('click', '.cancel-booking', function () {
         var reservationId = $(this).data('id');
-        // change the cursor to loading state
-        $(this).css('cursor', 'not-allowed');
-        $(this).attr('disabled', 'disabled');
+        // change the cursor of user to wait and disable the button
+        $(this).css('cursor', 'wait').prop('disabled', true);
         // show confirmation dialog
         confirm('Are you sure you want to cancel this booking?') && $.ajax({
             url: 'controllers/cancelReservation.php',
