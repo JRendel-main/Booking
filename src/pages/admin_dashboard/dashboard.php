@@ -1,3 +1,10 @@
+<?php
+if (isset($_GET['reservation'])) {
+    $response = $_GET['reservation'];
+    echo "<script>alert('$response')</script>";
+}
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 

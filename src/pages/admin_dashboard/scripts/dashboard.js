@@ -33,9 +33,9 @@ $(document).ready(function () {
                             if (data.status === '<badge class=\"badge badge-pill badge-success\">Approved</badge>') {
                                 // Show "Cancel" button if status is "approved"
                                 return `
-                                <button class="btn btn-danger btn-sm cancel-booking" data-id="${data.reservation_id}">Cancel Booking</button>`;
+                                <a class="btn btn-danger btn-sm cancel-booking" href="controllers/cancelReservation?id=${data.reservation_id}">Cancel</a>`;
                             } else {
-                                return `<button class="btn btn-secondary btn-sm" disabled>Cancel</button>`
+                                return `<a class="btn btn-secondary btn-sm" disabled>Cancel</a>`
                             }
                         }
                     }
@@ -96,9 +96,21 @@ $(document).ready(function () {
                         "data": null,
                         "title": "Action",
                         "render": function (data, type, row) {
-                            return '<a href="reservation_details.php?id=' + data.reservation_id + '" class="btn btn-primary btn-sm">View</a>';
+                            const reservationId = data.reservation_id;
+
+                            function button() {
+                                if (data.status === '<badge class=\"badge badge-pill badge-warning\">Pending</badge>') {
+                                    return `<a class="btn btn-success btn-sm approve-booking" href="controllers/approve_reservation.php?id=${reservationId}">Approve</a>
+                                    <a class="btn btn-danger btn-sm reject-booking" href="controllers/decline_reservation.php?id=${reservationId}">Reject</a>`;
+                                } else {
+                                    return `<button class="btn btn-secondary btn-sm" disabled>Approve</button>
+                                    <button class="btn btn-secondary btn-sm" disabled>Reject</button>`;
+                                }
+                            }
+                            return button();
                         }
                     }
+
                 ]
             });
         }

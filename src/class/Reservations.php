@@ -20,6 +20,14 @@ class Reservations
         return $reservations;
     }
 
+    public function getReservationDetails($reservation_id)
+    {
+        $query = "SELECT * FROM reservations WHERE ReservationID = $reservation_id";
+        $result = $this->conn->query($query);
+        $row = $result->fetch_assoc();
+        return $row;
+    }
+
     public function getPendingReservation()
     {
         $query = "SELECT * FROM reservations WHERE status = 'pending'";
@@ -58,4 +66,29 @@ class Reservations
             return false;
         }
     }
+
+    public function approveReservation($reservation_id)
+    {
+        $query = "UPDATE reservations SET status = 'approved' WHERE ReservationID = $reservation_id";
+        $result = $this->conn->query($query);
+
+        if ($result) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function declineReservation($reservation_id)
+    {
+        $query = "UPDATE reservations SET status = 'decline' WHERE ReservationID = $reservation_id";
+        $result = $this->conn->query($query);
+
+        if ($result) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 }

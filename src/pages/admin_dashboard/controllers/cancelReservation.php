@@ -1,7 +1,7 @@
 <?php
 include '../../../includes/autoloader.php';
 
-$reservationID = $_POST['reservationId'];
+$reservationID = $_POST['id'];
 
 $db = new Database();
 $connection = $db->getConnection();
