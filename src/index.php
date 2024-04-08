@@ -60,7 +60,7 @@ if ($error) {
                 <h1>Sign in</h1>
                 <input type="email" id="email" name="email" placeholder="Email" />
                 <input type="password" id="password" name="password" placeholder="Password" />
-                <a href="#">Forgot your password?</a>
+                <a href="forgot-password.php">Forgot your password?</a>
                 <button type="submit" value="Login">Sign In</button>
                 <!-- Admin login -->
                 <a href="pages/admin_dashboard/index.php">Admin Login</a>
