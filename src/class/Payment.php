@@ -173,4 +173,23 @@ class Payment
             return 0;
         }
     }
+
+    public function getAllPayments()
+    {
+        $sql = "SELECT a.PaymentID, a.ReservationID, a.AmountPaid, a.PaymentDate, a.PaymentProof, a.ReferenceNumber, b.CheckInDate, b.CheckOutDate, c.PackageName, d.FirstName, d.LastName
+                FROM payments a
+                JOIN reservations b ON a.ReservationID = b.ReservationID
+                JOIN packages c ON b.PackageID = c.PackageID
+                JOIN guests d ON b.GuestID = d.GuestID";
+        $result = $this->connection->query($sql);
+        if ($result->num_rows > 0) {
+            $payments = array();
+            while ($row = $result->fetch_assoc()) {
+                $payments[] = $row;
+            }
+            return $payments;
+        } else {
+            return array();
+        }
+    }
 }

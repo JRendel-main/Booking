@@ -29,6 +29,20 @@ class User
         }
     }
 
+    public function getAllGuest()
+    {
+        $conn = $this->db->getConnection();
+        $sql = "SELECT * FROM guests";
+        $result = $conn->query($sql);
+        $guests = [];
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $guests[] = $row;
+            }
+        }
+        return $guests;
+    }
+
     public function authenticate($email, $password)
     {
         $conn = $this->db->getConnection();

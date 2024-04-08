@@ -276,8 +276,9 @@ if (isset($_GET['reservation'])) {
                             <!-- Page Heading -->
                             <div class="d-sm-flex align-items-center justify-content-between mb-4">
                                 <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
-                                <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                                        class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
+                                <button class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"
+                                    data-toggle="modal" data-target="#generateReportModal"><i
+                                        class="fas fa-download fa-sm text-white-50"></i> Generate Report</button>
                             </div>
                         </div>
                     </div>
@@ -411,9 +412,34 @@ if (isset($_GET['reservation'])) {
                     </div>
                 </div>
             </div>
+            <!-- modal for generating report -->
+            <div class="modal fade" id="generateReportModal" tabindex="-1" role="dialog"
+                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Generate Report</h5>
+                            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="../../generate-report.php" method="POST">
+                                <div class="form-group">
+                                    <label for="reportType">Select Report Type</label>
+                                    <select class="form-control" id="reportType" name="reportType">
+                                        <option value="guests">All Guests</option>
+                                        <option value="reservations">All Reservations</option>
+                                        <option value="payments">All Payments</option>
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Generate Report</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <!-- End of Main Content -->
-
-
 
             <!-- Footer -->
             <footer class="sticky-footer bg-white">

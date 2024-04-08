@@ -86,4 +86,12 @@ class Packages
         $row = $result->fetch_assoc();
         return $row['PackageName'];
     }
+
+    public function getPackageDetails($packageId)
+    {
+        $query = "SELECT * FROM packages WHERE PackageID = '$packageId'";
+        $result = $this->conn->query($query);
+        $row = $result->fetch_assoc();
+        return $row;
+    }
 }

@@ -91,4 +91,15 @@ class Reservations
         }
     }
 
+    public function getAllReservations()
+    {
+        $query = "SELECT * FROM reservations";
+        $result = $this->conn->query($query);
+        $reservations = [];
+        while ($row = $result->fetch_assoc()) {
+            $reservations[] = $row;
+        }
+        return $reservations;
+    }
+
 }
