@@ -51,6 +51,8 @@ if ($error) {
                 <input type="email" id="email" name="email" required="required" placeholder="Email" />
                 <input type="number" id="cont_no" name="cont_no" required="required" placeholder="Contact Number" />
                 <input type="password" id="password" name="password" required="required" placeholder="Password" />
+                <input type="password" id="confirm_password" name="confirm_password" required="required"
+                    placeholder="Confirm Password" />
                 <button>Sign Up</button>
             </form>
         </div>

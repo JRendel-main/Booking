@@ -8,17 +8,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
     $cont_no = $_POST['cont_no'];
     $password = $_POST['password'];
+    $confirm_password = $_POST['confirm_password'];
 
-    $db = new Database();
-    $user = new User($db);
-    $auth = new Authentication($user);
+    if ($password === $confirm_password) {
+        $db = new Database();
+        $user = new User($db);
+        $auth = new Authentication($user);
 
-    $registering = $auth->register($firstname, $lastname, $address, $email, $cont_no, $password);
+        $registering = $auth->register($firstname, $lastname, $address, $email, $cont_no, $password);
 
-    if ($registering) {
-        header('Location: index.php?success=You have successfully registered!');
+        if ($registering) {
+            header('Location: index.php?success=You have successfully registered!');
+        } else {
+            header('Location: index.php?error=Email already exists');
+        }
     } else {
-        header('Location: index.php?error=Email already exists');
+        header('Location: index.php?error=Passwords do not match');
+        exit();
     }
 } else {
     header('Location: index.php');
