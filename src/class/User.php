@@ -195,6 +195,17 @@ class User
             $stmtToken->close();
             return false;
         }
+    }
 
+    public function checkPhone($contact)
+    {
+        $conn = $this->db->getConnection();
+        $sql = "SELECT * FROM guests WHERE Phone = '$contact'";
+        $result = $conn->query($sql);
+        if ($result->num_rows > 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

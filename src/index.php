@@ -14,8 +14,7 @@
         position: relative;
         background-color: white;
         border-radius: 10px;
-        box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25),
-            0 10px 10px rgba(0, 0, 0, 0.22);
+        box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
         overflow: hidden;
         width: 768px;
         max-width: 100%;
@@ -106,6 +105,11 @@
         transform: translateX(0);
         transition: transform 0.6s ease-in-out;
     }
+
+    #message {
+        color: red;
+        font-size: 10px;
+    }
     </style>
 </head>
 
@@ -119,7 +123,7 @@
                 <input type="text" id="last_name" name="last_name" required="required" placeholder="Last Name" />
                 <input type="text" id="address" name="address" required placeholder="Address" />
                 <input type="email" id="email" name="email" required="required" placeholder="Email" />
-                <input type="number" id="cont_no" name="cont_no" required="required" placeholder="Contact Number" />
+                <input type="tel" id="cont_no" name="cont_no" required="required" placeholder="Contact Number" />
                 <input type="password" id="password" name="password" required="required" placeholder="Password" />
                 <span id="message"></span>
                 <input type="password" id="confirm_password" name="confirm_password" required="required"
@@ -161,14 +165,12 @@
     <script>
     $(document).ready(function() {
         // password validation on sign up
-        // 8 characters, 1 uppercase, 1 number dont use regex, every keyup
         $('#password').keyup(function() {
             var password = $('#password').val();
             var passwordLength = password.length;
             var hasUppercase = /[A-Z]/.test(password);
             var hasNumber = /\d/.test(password);
             if (passwordLength >= 8 && hasUppercase && hasNumber) {
-                // remove message password
                 $('#message').text('');
             } else {
                 $('#message').text(
@@ -176,11 +178,53 @@
                     .css('color',
                         'red');
             }
-
-            // remove message if not keyup
             $('#password').focusout(function() {
                 $('#message').text('');
             });
+        });
+
+        // validation for first and last names
+        $.validator.addMethod("lettersOnly", function(value, element) {
+            return this.optional(element) || /^[a-zA-Z]+$/i.test(value);
+        }, "Letters only please");
+
+        $('#signup').validate({
+            rules: {
+                first_name: {
+                    required: true,
+                    lettersOnly: true
+                },
+                last_name: {
+                    required: true,
+                    lettersOnly: true
+                },
+                cont_no: {
+                    required: true,
+                    minlength: 10,
+                    digits: true
+                }
+            },
+            messages: {
+                first_name: {
+                    required: "Please enter your first name."
+                },
+                last_name: {
+                    required: "Please enter your last name."
+                },
+                cont_no: {
+                    required: "Please enter your contact number.",
+                    minlength: "Contact number should be at least 10 characters long.",
+                    digits: "Please enter only digits."
+                }
+            }
+        });
+
+        // Automatically add +63 to contact number
+        $('#cont_no').on('input', function() {
+            var inputVal = $(this).val();
+            if (inputVal.substring(0, 3) !== "+63") {
+                $(this).val("+63" + inputVal);
+            }
         });
     });
     </script>

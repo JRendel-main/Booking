@@ -15,6 +15,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $user = new User($db);
         $auth = new Authentication($user);
 
+        $checkPhone = $user->checkPhone($cont_no);
+
+        if ($checkPhone) {
+            header('Location: index.php?error=Phone number already exists');
+            exit();
+        }
+
         $registering = $auth->register($firstname, $lastname, $address, $email, $cont_no, $password);
 
         if ($registering) {
