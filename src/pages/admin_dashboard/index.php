@@ -4,12 +4,12 @@ include '../../includes/autoloader.php';
 // check the session if the user is logged in
 $session = new Session();
 if ($session->get('email') != null) {
-    header('Location: ../index.php');
+    header('Location: dashboard.php');
 }
 
 // check the error or success message
-$error = isset ($_GET['error']) ? $_GET['error'] : '';
-$success = isset ($_GET['success']) ? $_GET['success'] : '';
+$error = isset($_GET['error']) ? $_GET['error'] : '';
+$success = isset($_GET['success']) ? $_GET['success'] : '';
 
 // display the error or success message
 if ($error) {

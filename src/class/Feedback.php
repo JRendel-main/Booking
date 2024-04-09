@@ -59,4 +59,15 @@ class Feedback
             return false;
         }
     }
+
+    public function deleteFeedback($feedback_id)
+    {
+        $sql = "DELETE FROM feedbacks WHERE feedback_id = $feedback_id";
+
+        if ($this->conn->query($sql) === TRUE) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

@@ -36,7 +36,7 @@ if (isset($_GET['reservation'])) {
     <!-- Page Wrapper -->
     <div id="wrapper">
         <!-- Sidebar -->
-        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+        <ul class="navbar-nav bg-gradient-secondary sidebar sidebar-dark accordion" id="accordionSidebar">
             <!-- Sidebar - Brand -->
             <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.php">
                 <div class="sidebar-brand-icon rotate-n-15">
@@ -89,12 +89,11 @@ if (isset($_GET['reservation'])) {
                     <span>Packages</span></a>
             </li>
 
-            <!-- Nav Item - Tables -->
-            <li class="nav-item">
-                <a class="nav-link" href="tables.php">
-                    <i class="fas fa-fw fa-table"></i>
-                    <span>Tables</span></a>
-            </li>
+            <div class="nav-item">
+                <a class="nav-link" href="feedback.php">
+                    <i class="fas fa-fw fa-chart-area"></i>
+                    <span>Feedback</span></a>
+            </div>
 
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">

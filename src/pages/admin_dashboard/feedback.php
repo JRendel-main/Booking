@@ -1,3 +1,30 @@
+<?php
+include '../../includes/autoloader.php';
+// check the session if the user is logged in
+$session = new Session();
+if ($session->get('email') == null) {
+    header('Location: ../index.php');
+}
+
+// check the error or success message
+$error = isset($_GET['error']) ? $_GET['error'] : '';
+$success = isset($_GET['success']) ? $_GET['success'] : '';
+
+// display the error or success message
+if ($error) {
+    echo "
+    <script>
+        alert('{$error}');
+    </script>";
+} else {
+    echo "
+    <script>
+        alert('{$success}');
+    </script>
+    ";
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -9,7 +36,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Manage Package</title>
+    <title>Manage Feedbacks</title>
 
     <!-- Custom fonts for this template-->
     <link href="../../../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -175,78 +202,31 @@
                         <div class="container">
                             <!-- Page Heading -->
                             <div class="d-sm-flex justify-content-between align-items-center mb-4">
-                                <h1 class="h3 mb-0 text-gray-800">Manage Packages</h1>
-                                <div class="d-flex">
-                                    <button class="btn btn-sm btn-success shadow-sm" data-toggle="modal"
-                                        data-target="#addPackageModal">
-                                        <i class=" fas fa-plus fa-sm text-white-50"></i> Add Package
-                                    </button>
-                                </div>
+                                <h1 class="h3 mb-0 text-gray-800">Manage Feedbacks</h1>
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="container">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <h6 class="m-0 font-weight-bold text-primary">Standard Package</h6>
-                                                </div>
-                                                <div class="col-md-6 text-right">
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="card-body">
-                                            <div class="table-responsive">
-                                                <table class="table table-bordered table-striped table-hover"
-                                                    id="standard_package_list" width="100%" cellspacing="0">
-                                                    <thead class="thead-dark">
-                                                        <tr>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">Feedbacks</h6>
                                 </div>
-                            </div>
-                            <div class="row mt-auto">
-                                <div class="col-md-12">
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <h6 class="m-0 font-weight-bold text-primary">Custom Package</h6>
-                                                </div>
-                                                <div class="col-md-6 text-right">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="card-body">
-                                            <div class="table-responsive table-striped">
-                                                <table class="table table-bordered" id="custom_package_list"
-                                                    width="100%" cellspacing="0">
-                                                    <thead class="thead-dark">
-                                                        <tr>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered" id="feedbacks" width="100%" cellspacing="0">
+                                            <thead>
+
+                                            </thead>
+                                            <tbody>
+                                                <!-- Feedbacks will be displayed here -->
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
             <!-- End of Main Content -->
@@ -350,7 +330,7 @@
     <!-- Page level custom scripts -->
     <script src="../../../js/demo/chart-area-demo.js"></script>
     <script src="../../../js/demo/chart-pie-demo.js"></script>
-    <script src="scripts/packages.js"></script>
+    <script src="scripts/feedbacks.js"></script>
 
 
 </body>
