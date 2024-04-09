@@ -33,7 +33,7 @@ $(document).ready(function () {
                             if (data.status === '<badge class=\"badge badge-pill badge-success\">Approved</badge>') {
                                 // Show "Cancel" button if status is "approved"
                                 return `
-                                <a class="btn btn-danger btn-sm cancel-booking" href="controllers/cancelReservation?id=${data.reservation_id}">Cancel</a>`;
+                                <a class="btn btn-danger btn-sm cancel-booking" href="controllers/cancelReservation.php?id=${data.reservation_id}">Cancel</a>`;
                             } else {
                                 return `<a class="btn btn-secondary btn-sm" disabled>Cancel</a>`
                             }

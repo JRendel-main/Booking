@@ -1,7 +1,7 @@
 <?php
 include '../../../includes/autoloader.php';
 
-$reservationID = $_POST['id'];
+$reservationID = $_GET['id'];
 
 $db = new Database();
 $connection = $db->getConnection();
@@ -28,22 +28,10 @@ if ($cancelReservation) {
     $email->sendEmail($to, $subject, $type, $message);
 
     if ($email) {
-        $response = [
-            'status' => 'success',
-            'message' => 'Reservation cancelled successfully. Email sent to user'
-        ];
+        header('Location: ../dashboard.php?reservation=Reservation cancelled successfully. Email sent to user');
     } else {
-        $response = [
-            'status' => 'success',
-            'message' => 'Reservation cancelled successfully. Failed to send email to user'
-        ];
-
+        header('Location: ../dashboard.php?reservation=Reservation cancelled successfully. Failed to send email to user');
     }
 } else {
-    $response = [
-        'status' => 'error',
-        'message' => 'Failed to cancel reservation'
-    ];
+    header('Location: ../dashboard.php?reservation=Reservation cancelled failed.');
 }
-
-echo json_encode($response);
