@@ -1,3 +1,3 @@
 <?php
 
-header('Location: src/index.php');
+header('Location: src/pages/user_dashboard/index.php');

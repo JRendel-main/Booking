@@ -23,12 +23,22 @@
                     <a class="nav-link" href="viewfeedbacks.php">Feedbacks</a>
                 </li>
                 <li class="nav-item">
-                    <span class="text-dark nav-link">Hi,
-                        <?php echo $_SESSION["email"]; ?>
+                    <span class="text-dark nav-link">
+                        <?php
+                        if (isset($_SESSION['email'])) {
+                            echo "Hi, " . $_SESSION['email'];
+                        }
+                        ?>
                     </span>
                 </li>
                 <li class="nav-item">
-                    <a href="../../logout.php" class="btn btn-danger ml-2">Log out</a>
+                    <?php
+                    if (isset($_SESSION['email'])) {
+                        echo '<a class="btn btn-danger" href="../../logout.php">Logout</a>';
+                    } else {
+                        echo '<a class="btn btn-success" href="../index.php">Login</a>';
+                    }
+                    ?>
                 </li>
             </ul>
             <li class="nav-item">
