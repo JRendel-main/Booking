@@ -41,6 +41,16 @@ if ($error) {
 
 <body>
     <div class="container" id="container">
+        <!-- Sign up -->
+        <div class="form-container sign-up-container">
+            <form id="register-form" method="post" action="admin-register.php">
+                <h1>Create Account</h1>
+                <input type="text" id="name" name="name" placeholder="Name" />
+                <input type="text" id="email" name="email" placeholder="Email" />
+                <input type="password" id="password" name="password" placeholder="Password" />
+                <button type="submit" value="Register">Sign Up</button>
+            </form>
+        </div>
         <!-- Sign in -->
         <div class="form-container sign-in-container">
             <form id="login-form" method="post" action="admin-login.php">

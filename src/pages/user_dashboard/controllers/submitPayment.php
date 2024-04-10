@@ -13,6 +13,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $selectedPackage = $_POST['selectedPackage'];
         $selectedAddons = $_POST['selectedAddons'];
         $referenceNumber = $_POST['referenceNumber'];
+        $sender = $_POST['sender'];
         $dateSent = date('Y-m-d H:i:s');
         $guestEmail = $_POST['guestEmail'];
 
@@ -39,7 +40,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             // Check if upload was successful
             if ($uploadProofOfPayment !== false) {
                 // Submit payment
-                $submitPayment = $payment->submitPayment($reservationID, $amountPaid, $dateSent, $uploadProofOfPayment, $referenceNumber);
+                $submitPayment = $payment->submitPayment($reservationID, $amountPaid, $dateSent, $uploadProofOfPayment, $sender, $referenceNumber);
 
                 // Check if payment submission was successful
                 if ($submitPayment !== false) {

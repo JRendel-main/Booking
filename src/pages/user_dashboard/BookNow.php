@@ -46,31 +46,7 @@ if ($get_role != 'user') {
                     </div>
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-md-4">
-                                <div class="card">
-                                    <!-- Form for adding date manually -->
-                                    <div class="card-header">
-                                        <h5 class="card-title">
-                                            Add a date manually
-                                        </h5>
-                                    </div>
-                                    <div class="card-body">
-                                        <form id="add_date">
-                                            <div class="form-group">
-                                                <label for="date">Start Date:</label>
-                                                <input type="date" class="form-control" id="start" name="date" required>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="time">End Date:</label>
-                                                <input type="date" class="form-control" id="end" name="date" required>
-                                            </div>
-                                            <p class="text-info" id="error"><i>Please select vacant date</i></p>
-                                            <button type="submit" class="btn btn-primary">Add Date</button>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-8">
+                            <div class="col-md-12">
                                 <div id='calendar'></div>
                             </div>
                         </div>
@@ -210,37 +186,29 @@ if ($get_role != 'user') {
                             </div>
                             <div class="row mt-3">
                                 <div class="col-md-12">
-                                    <h5>Addons:</h5>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="" id="addon1">
-                                        <label class="form-check-label" for="addon1">
-                                            Jacuzzi | Additional - 300PHP/hour
-                                        </label>
+                                    <h5>Lists of Addons:</h5>
+                                    <!-- <ul>
+                                        <li>Jacuzzi | Additional - 300PHP/hour</li>
+                                        <li>Gas Stove | Additional - 250PHP/day</li>
+                                        <li>Dryer Machine | 50PHP/Hour</li>
+                                        <li>Himalayan Charcoal | 100PHP/Hour</li>
+                                        <li>Air Fryer | 150PHP/Hour</li>
+                                    </ul> -->
+                                    <div class="row">
+                                        <div class="flex gap-2">
+                                            <strong class="col-md-6">Jacuzzi | Additional - 300PHP/hour</strong>
+                                            <br />
+                                            <strong class="col-md-6">Gas Stove | Additional - 250PHP/day</strong>
+                                            <br />
+                                            <strong class="col-md-6">Dryer Machine | 50PHP/Hour</strong>
+                                            <br />
+                                            <strong class="col-md-6">Himalayan Charcoal | 100PHP/Hour</strong>
+                                            <br />
+                                            <strong class="col-md-6">Air Fryer | 150PHP/Hour</strong>
+                                        </div>
                                     </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="" id="addon2">
-                                        <label class="form-check-label" for="addon2">
-                                            Gas Stove | Additional - 250PHP/day
-                                        </label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="" id="addon3">
-                                        <label class="form-check-label" for="addon3">
-                                            Dryer Machine | 50PHP/Hour
-                                        </label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="" id="addon4">
-                                        <label class="form-check-label" for="addon4">
-                                            Himalayan Charcoal | 100PHP/Hour
-                                        </label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="" id="addon5">
-                                        <label class="form-check" for="addon5">
-                                            Air Fryer | 150PHP/Hour
-                                        </label>
-                                    </div>
+
+                                    <p class="note">* Addons request upon on venue</p>
                                 </div>
                             </div>
                         </div>
@@ -279,6 +247,10 @@ if ($get_role != 'user') {
                             <div class="form-group">
                                 <label for="proofOfPayment">Proof of Payment:</label>
                                 <input type="file" class="form-control" id="proofOfPayment">
+                            </div>
+                            <div class="form-group">
+                                <label for="sender">Name of Sender:</label>
+                                <input type="text" class="form-control" id="sender">
                             </div>
                             <div class="form-group">
                                 <label for="referenceNumber">Reference Number:</label>
@@ -445,6 +417,7 @@ if ($get_role != 'user') {
                 var selectedPackage = $('#selectedPackage').val();
                 var selectedAddons = $('#selectedAddons').val();
                 var proofOfPayment = $('#proofOfPayment').prop('files')[0];
+                var sender = $('#sender').val();
                 var referenceNumber = $('#referenceNumber').val();
                 var dateSent = $('#dateSent').val();
                 var formData = new FormData();
@@ -453,6 +426,7 @@ if ($get_role != 'user') {
                 formData.append('selectedPackage', selectedPackage);
                 formData.append('selectedAddons', selectedAddons);
                 formData.append('proofOfPayment', proofOfPayment);
+                formData.append('sender', sender);
                 formData.append('referenceNumber', referenceNumber);
                 formData.append('dateSent', dateSent);
                 formData.append('guestEmail', '<?php echo $session->get('email'); ?>');

@@ -18,6 +18,8 @@ class Payment
     private $paymentDate;
     private $paymentProof;
 
+    private $sender;
+
     public function __construct($connection)
     {
         $this->connection = $connection;
@@ -141,17 +143,18 @@ class Payment
     }
 
 
-    public function submitPayment($reservationId, $amountPaid, $paymentDate, $PaymentProof, $referenceNumber)
+    public function submitPayment($reservationId, $amountPaid, $paymentDate, $PaymentProof, $sender, $referenceNumber)
     {
         try {
             $this->reservationId = $reservationId;
             $this->amountPaid = $amountPaid;
             $this->paymentDate = $paymentDate;
             $this->paymentProof = $PaymentProof;
+            $this->sender = $sender;
             $this->referenceNumber = $referenceNumber;
 
-            $sql = "INSERT INTO payments (ReservationID, AmountPaid, PaymentDate, PaymentProof, ReferenceNumber) 
-                    VALUES ('$reservationId', '$amountPaid', '$paymentDate', '$PaymentProof', '$referenceNumber')";
+            $sql = "INSERT INTO payments (ReservationID, AmountPaid, PaymentDate, PaymentProof, sender, ReferenceNumber) 
+                    VALUES ('$reservationId', '$amountPaid', '$paymentDate', '$PaymentProof', '$sender', $referenceNumber')";
             if ($this->connection->query($sql) === TRUE) {
                 return true;
             } else {
