@@ -26,7 +26,7 @@ $(document).ready(() => {
                         "data": null,
                         "title": "Action",
                         "render": function (data, type, row) {
-                            return '<a href="edit_package.php?id=' + data.PackageID + '" class="btn btn-primary btn-sm">Edit</a>';
+                            return '<a href="controllers/delete_package.php?id=' + data.PackageID + '" class="btn btn-danger btn-sm">Delete</a>';
                         }
                     }
                 ]
@@ -61,7 +61,7 @@ $(document).ready(() => {
                         "data": null,
                         "title": "Action",
                         "render": function (data, type, row) {
-                            return '<a href="edit_package.php?id=' + data.PackageID + '" class="btn btn-primary btn-sm">Edit</a>';
+                            return '<a href="controllers/delete_package.php?id=' + data.PackageID + '" class="btn btn-danger btn-sm">Delete</a>';
                         }
                     }
                 ]

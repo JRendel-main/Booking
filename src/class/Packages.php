@@ -94,4 +94,14 @@ class Packages
         $row = $result->fetch_assoc();
         return $row;
     }
+
+    public function deletePackage($id)
+    {
+        $query = "DELETE FROM packages WHERE PackageID = '$id'";
+        if ($this->conn->query($query) === TRUE) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
