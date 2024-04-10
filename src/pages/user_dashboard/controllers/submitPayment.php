@@ -39,12 +39,53 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
             // Check if upload was successful
             if ($uploadProofOfPayment !== false) {
+                $amountPaid = $amountPaid / 2;
                 // Submit payment
                 $submitPayment = $payment->submitPayment($reservationID, $amountPaid, $dateSent, $uploadProofOfPayment, $sender, $referenceNumber);
 
                 // Check if payment submission was successful
                 if ($submitPayment !== false) {
-                    echo json_encode(array("message" => "Payment submitted successfully", "success" => true, "reservationID" => $reservationID));
+                    // echo json_encode(array("message" => "Payment submitted successfully", "success" => true, "reservationID" => $reservationID));
+                    $vendor = '../../../../vendor/autoload.php';
+                    $email = new Email($vendor);
+                    $to = $guestEmail;
+                    $subject = 'Transcation Receipt';
+                    $type = 'payment_confirmation';
+                    $htmlContent = "
+                    <div class='container'>
+                        <h2>Transaction Receipt</h2>
+                        <p>Dear Customer,</p>
+                        <p>Thank you for your payment. Here are the details of your transaction:</p>
+                        <table class='table'>
+                            <tr>
+                                <th>Package Selected</th>
+                                <td>{$selectedPackage}</td>
+                            </tr>
+                            <tr>
+                                <th>Amount Paid</th>
+                                <td>{$amountPaid}</td>
+                            </tr>
+                            <tr>
+                                <th>Payment Date</th>
+                                <td>{$dateSent}</td>
+                            </tr>
+                            <tr>
+                                <th>Reference Number</th>
+                                <td>{$referenceNumber}</td>
+                            </tr>
+                        </table>
+                        <p>If you have any questions, please contact us.</p>
+                        <p>Thank you,</p>
+                        <p>Your Company</p>
+                    </div>";
+                    $email->sendEmail($to, $subject, $type, $htmlContent);
+
+                    if ($email) {
+                        echo json_encode(array("message" => "Payment submitted successfully. Email sent to user", "success" => true, "reservationID" => $reservationID));
+                    } else {
+                        echo json_encode(array("message" => "Payment submitted successfully. Failed to send email to user", "success" => true, "reservationID" => $reservationID));
+                    }
+
                 } else {
                     throw new Exception("Failed to submit payment");
                 }

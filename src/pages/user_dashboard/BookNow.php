@@ -20,19 +20,19 @@ if ($get_role != 'user') {
 
 <!-- Bootstrap styles and custom styles -->
 <style>
-    .schedule-card {
-        width: 100%;
-        border-radius: 10px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        margin-top: 10vh;
-    }
+.schedule-card {
+    width: 100%;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-top: 10vh;
+}
 
-    .rules {
-        text-align: left;
-        font-size: 14px;
-        line-height: 1.5;
-        margin-top: 10px;
-    }
+.rules {
+    text-align: left;
+    font-size: 14px;
+    line-height: 1.5;
+    margin-top: 10px;
+}
 </style>
 
 <body>
@@ -224,7 +224,7 @@ if ($get_role != 'user') {
     <!-- Payment Modal -->
     <div class="modal fade" id="paymentModal" tabindex="-1" role="dialog" aria-labelledby="paymentModalLabel"
         aria-hidden="true">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="paymentModalLabel">Payment Information</h5>
@@ -237,6 +237,17 @@ if ($get_role != 'user') {
                     <input type="hidden" id="selectedPackage">
                     <input type="hidden" id="selectedAddons">
 
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h3 class="text-center">Reciept</h3>
+                            <h5 class="text-left">Total Price:
+                                <span id="totalAmount"></span>
+                            </h5>
+                            <!-- Total due amount today for downpayment 50% -->
+                            <h5 class="text-left">50% Deposit Due Now: <span id="totalDueAmount"></span></h5>
+                        </div>
+                    </div>
+                    <hr />
                     <div class="row">
                         <div class="col-md-6">
                             <p>Send your payment here:</p>
@@ -262,6 +273,7 @@ if ($get_role != 'user') {
                             </div>
                         </div>
                     </div>
+                    <hr />
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -270,6 +282,8 @@ if ($get_role != 'user') {
             </div>
         </div>
     </div>
+
+    <!-- Confirm total amount before payment -->
 
     <!-- Reciept modal -->
     <div class="modal fade" id="recieptModal" tabindex="-1" role="dialog" aria-labelledby="recieptModalLabel"
@@ -288,7 +302,6 @@ if ($get_role != 'user') {
                             <h5>Thank you for booking with us! Here is your reciept:</h5>
                             <p>Please wait for the confirmation of your booking. We will send you an email once your
                                 booking is confirmed.</p>
-
                         </div>
                     </div>
                     <!-- Add total payment here -->
@@ -314,202 +327,217 @@ if ($get_role != 'user') {
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js'></script>
 
     <script>
-        $(document).ready(function () {
-            $.ajax({
-                url: 'controllers/getReservations.php',
-                type: 'GET',
-                success: function (res) {
-                    var data = JSON.parse(res);
-                    var events = [];
-                    data.forEach(function (d) {
-                        events.push({
-                            title: 'Reserved',
-                            start: d.CheckInDate,
-                            end: d.CheckOutDate,
-                            color: 'red'
-                        });
+    $(document).ready(function() {
+        $.ajax({
+            url: 'controllers/getReservations.php',
+            type: 'GET',
+            success: function(res) {
+                var data = JSON.parse(res);
+                var events = [];
+                data.forEach(function(d) {
+                    events.push({
+                        title: 'Reserved',
+                        start: d.CheckInDate,
+                        end: d.CheckOutDate,
+                        color: 'red'
                     });
-                    var calendarEl = document.getElementById('calendar');
-                    var calendar = new FullCalendar.Calendar(calendarEl, {
-                        initialView: 'dayGridMonth',
-                        headerToolbar: {
-                            left: 'prev,next today',
-                            center: 'title',
-                            right: 'dayGridMonth,timeGridWeek,timeGridDay'
-                        },
-                        events: events,
-                        dateClick: function (info) {
-                            var selectedDate = new Date(info.dateStr);
-                            var currentDate = new Date();
-                            currentDate.setHours(0, 0, 0, 0);
+                });
+                var calendarEl = document.getElementById('calendar');
+                var calendar = new FullCalendar.Calendar(calendarEl, {
+                    initialView: 'dayGridMonth',
+                    headerToolbar: {
+                        left: 'prev,next today',
+                        center: 'title',
+                        right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                    },
+                    events: events,
+                    dateClick: function(info) {
+                        var selectedDate = new Date(info.dateStr);
+                        var currentDate = new Date();
+                        currentDate.setHours(0, 0, 0, 0);
 
-                            if (selectedDate <= currentDate) {
-                                alert('You cannot reserve on a past or today\'s date.');
+                        if (selectedDate <= currentDate) {
+                            alert('You cannot reserve on a past or today\'s date.');
+                        } else {
+                            // Check if the selected date has a reservation
+                            var hasReservation = events.some(function(event) {
+                                return event.start === info.dateStr;
+                            });
+
+                            if (hasReservation) {
+                                alert('There is already a reservation on this date.');
                             } else {
-                                // Check if the selected date has a reservation
-                                var hasReservation = events.some(function (event) {
-                                    return event.start === info.dateStr;
-                                });
-
-                                if (hasReservation) {
-                                    alert('There is already a reservation on this date.');
-                                } else {
-                                    $('#selectedDate').text(info.dateStr);
-                                    $('#selectpackage').modal('show');
-                                }
+                                $('#selectedDate').text(info.dateStr);
+                                $('#selectpackage').modal('show');
                             }
-                        },
-                        eventClick: function (info) {
-                            alert('Event: ' + info.event.title);
                         }
+                    },
+                    eventClick: function(info) {
+                        alert('Event: ' + info.event.title);
+                    }
+                });
+                calendar.render();
+            }
+        });
+
+        $('#policies').hide();
+        $('#payment').hide();
+        // check what package is selected
+        $('#package').on('click', 'a', function(e) {
+            e.preventDefault();
+            var packageId = $(this).attr('id'); // Get the ID of the clicked package
+            $('#selectedPackage').val(packageId); // Set the selected package ID in the hidden input
+            $('#package').hide();
+            $('#policies').show();
+            $('#payment').show();
+            alert('Package ' + packageId + ' selected');
+        });
+
+
+        // when payment button is clicked, get package and date and addons
+        $('#payment').on('click', function() {
+            $('#selectpackage').modal('toggle');
+            var selectedDate = $('#selectedDate').text();
+            var selectedPackage = $('#selectedPackage').val();
+
+            // get the total cost
+            var cost;
+            // add details to reciept
+            $.ajax({
+                url: 'getCost.php',
+                type: 'POST',
+                data: {
+                    packageId: selectedPackage
+                },
+                success: function(res) {
+                    // parse json
+                    var package = JSON.parse(res);
+                    cost = package.Price;
+
+                    // convert to int
+                    cost = parseInt(cost);
+
+                    // compute to 50% downpayment and 50% full payment
+                    var downpayment = cost / 2;
+                    // convert to readable price format
+                    cost = cost.toLocaleString();
+                    downpayment = downpayment.toLocaleString();
+                    $('#totalAmount').text('₱' + cost);
+                    $('#totalDueAmount').text('₱' + downpayment);
+                },
+                error: function(xhr, status, error) {
+                    // handle error
+                    console.error("Error fetching cost:", error);
+                }
+            });
+
+            $('#selectedDate').val(selectedDate);
+            $('#selectedPackage').val(selectedPackage);
+            $('#selectedAddons').val(selectedAddons);
+            $('#selectmodal').modal('hide');
+            $('#paymentModal').modal('show');
+
+            $('#selectedAddons').val(JSON.stringify(selectedAddons));
+        });
+
+        $('#paymentModal').on('click', '#submitPayment', function() {
+            var selectedDate = $('#selectedDate').val();
+            var selectedPackage = $('#selectedPackage').val();
+            var selectedAddons = $('#selectedAddons').val();
+            var proofOfPayment = $('#proofOfPayment').prop('files')[0];
+            var sender = $('#sender').val();
+            var referenceNumber = $('#referenceNumber').val();
+            var dateSent = $('#dateSent').val();
+            var formData = new FormData();
+
+            formData.append('selectedDate', selectedDate);
+            formData.append('selectedPackage', selectedPackage);
+            formData.append('selectedAddons', selectedAddons);
+            formData.append('proofOfPayment', proofOfPayment);
+            formData.append('sender', sender);
+            formData.append('referenceNumber', referenceNumber);
+            formData.append('dateSent', dateSent);
+            formData.append('guestEmail', '<?php echo $session->get('email'); ?>');
+
+            $.ajax({
+                url: 'controllers/submitPayment.php',
+                type: 'POST',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function(res) {
+                    console.log(res);
+                }
+            });
+
+            // open reciept modal
+            $('#paymentModal').modal('toggle');
+            $('#recieptModal').modal('show');
+
+            // add data to modal for reciept
+            // calculate the cost
+
+            var cost;
+            $.ajax({
+                url: 'getCost.php',
+                type: 'POST',
+                data: {
+                    packageId: selectedPackage
+                },
+                success: function(res) {
+                    // parse json
+                    var package = JSON.parse(res);
+                    cost = package.Price;
+
+                    // convert to int
+                    cost = parseInt(cost);
+
+                    // add addons cost
+                    if (selectedAddons.includes('Jacuzzi')) {
+                        cost += 300;
+                    } else if (selectedAddons.includes('Gas Stove')) {
+                        cost += 250;
+                    } else if (selectedAddons.includes('Dryer Machine')) {
+                        cost += 50;
+                    } else if (selectedAddons.includes('Himalayan Charcoal')) {
+                        cost += 100;
+                    } else if (selectedAddons.includes('Air Fryer')) {
+                        cost += 150;
+                    }
+
+                    // make the date readable
+                    var date = new Date(selectedDate);
+                    var options = {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    };
+                    date = date.toLocaleDateString('en-US', options);
+
+                    // add the data to the receipt modal
+                    $('#bookingDate').text(date);
+                    $('#bookingPackage').text(selectedPackage);
+                    $('#bookingReferenceNumber').text(referenceNumber);
+                    $('#bookingDateSent').text(dateSent);
+                    $('#bookingCost').text('₱' + cost);
+
+                    // add the addons to the receipt modal
+                    var addons = '';
+                    selectedAddons.forEach(function(addon) {
+                        addons += '<span>' + addon + '</span><br>';
                     });
-                    calendar.render();
+                    $('#addons').html(addons);
+
+                    // open receipt modal after processing data
+                    $('#recieptModal').modal('show');
+                },
+                error: function(xhr, status, error) {
+                    // handle error
+                    console.error("Error fetching cost:", error);
                 }
-            });
-
-            $('#policies').hide();
-            $('#payment').hide();
-            // check what package is selected
-            $('#package').on('click', 'a', function (e) {
-                e.preventDefault();
-                var packageId = $(this).attr('id'); // Get the ID of the clicked package
-                $('#selectedPackage').val(packageId); // Set the selected package ID in the hidden input
-                $('#package').hide();
-                $('#policies').show();
-                $('#payment').show();
-                alert('Package ' + packageId + ' selected');
-            });
-
-
-            // when payment button is clicked, get package and date and addons
-            $('#payment').on('click', function () {
-                $('#selectpackage').modal('toggle');
-                var selectedDate = $('#selectedDate').text();
-                var selectedPackage = $('#selectedPackage').val();
-                var selectedAddons = [];
-                if ($('#addon1').is(':checked')) {
-                    selectedAddons.push('Jacuzzi');
-                }
-                if ($('#addon2').is(':checked')) {
-                    selectedAddons.push('Gas Stove');
-                }
-                if ($('#addon3').is(':checked')) {
-                    selectedAddons.push('Dryer Machine');
-                }
-                if ($('#addon4').is(':checked')) {
-                    selectedAddons.push('Himalayan Charcoal');
-                }
-                if ($('#addon5').is(':checked')) {
-                    selectedAddons.push('Air Fryer');
-                }
-                $('#selectedAddons').val(selectedAddons);
-                $('#selectedDate').val(selectedDate);
-                $('#selectedPackage').val(selectedPackage);
-                $('#selectedAddons').val(selectedAddons);
-                $('#selectmodal').modal('hide');
-                $('#paymentModal').modal('show');
-
-                $('#selectedAddons').val(JSON.stringify(selectedAddons));
-            });
-
-            $('#paymentModal').on('click', '#submitPayment', function () {
-                var selectedDate = $('#selectedDate').val();
-                var selectedPackage = $('#selectedPackage').val();
-                var selectedAddons = $('#selectedAddons').val();
-                var proofOfPayment = $('#proofOfPayment').prop('files')[0];
-                var sender = $('#sender').val();
-                var referenceNumber = $('#referenceNumber').val();
-                var dateSent = $('#dateSent').val();
-                var formData = new FormData();
-
-                formData.append('selectedDate', selectedDate);
-                formData.append('selectedPackage', selectedPackage);
-                formData.append('selectedAddons', selectedAddons);
-                formData.append('proofOfPayment', proofOfPayment);
-                formData.append('sender', sender);
-                formData.append('referenceNumber', referenceNumber);
-                formData.append('dateSent', dateSent);
-                formData.append('guestEmail', '<?php echo $session->get('email'); ?>');
-
-                $.ajax({
-                    url: 'controllers/submitPayment.php',
-                    type: 'POST',
-                    data: formData,
-                    contentType: false,
-                    processData: false,
-                    success: function (res) {
-                        console.log(res);
-                    }
-                });
-
-                // open reciept modal
-                $('#paymentModal').modal('toggle');
-                $('#recieptModal').modal('show');
-
-                // add data to modal for reciept
-                // calculate the cost
-
-                var cost;
-                $.ajax({
-                    url: 'getCost.php',
-                    type: 'POST',
-                    data: {
-                        packageId: selectedPackage
-                    },
-                    success: function (res) {
-                        // parse json
-                        var package = JSON.parse(res);
-                        cost = package.Price;
-
-                        // convert to int
-                        cost = parseInt(cost);
-
-                        // add addons cost
-                        if (selectedAddons.includes('Jacuzzi')) {
-                            cost += 300;
-                        } else if (selectedAddons.includes('Gas Stove')) {
-                            cost += 250;
-                        } else if (selectedAddons.includes('Dryer Machine')) {
-                            cost += 50;
-                        } else if (selectedAddons.includes('Himalayan Charcoal')) {
-                            cost += 100;
-                        } else if (selectedAddons.includes('Air Fryer')) {
-                            cost += 150;
-                        }
-
-                        // make the date readable
-                        var date = new Date(selectedDate);
-                        var options = {
-                            year: 'numeric',
-                            month: 'long',
-                            day: 'numeric'
-                        };
-                        date = date.toLocaleDateString('en-US', options);
-
-                        // add the data to the receipt modal
-                        $('#bookingDate').text(date);
-                        $('#bookingPackage').text(selectedPackage);
-                        $('#bookingReferenceNumber').text(referenceNumber);
-                        $('#bookingDateSent').text(dateSent);
-                        $('#bookingCost').text('₱' + cost);
-
-                        // add the addons to the receipt modal
-                        var addons = '';
-                        selectedAddons.forEach(function (addon) {
-                            addons += '<span>' + addon + '</span><br>';
-                        });
-                        $('#addons').html(addons);
-
-                        // open receipt modal after processing data
-                        $('#recieptModal').modal('show');
-                    },
-                    error: function (xhr, status, error) {
-                        // handle error
-                        console.error("Error fetching cost:", error);
-                    }
-                });
             });
         });
+    });
     </script>
 
     <!-- Include Bootstrap JS -->

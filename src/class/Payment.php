@@ -145,23 +145,20 @@ class Payment
 
     public function submitPayment($reservationId, $amountPaid, $paymentDate, $PaymentProof, $sender, $referenceNumber)
     {
-        try {
-            $this->reservationId = $reservationId;
-            $this->amountPaid = $amountPaid;
-            $this->paymentDate = $paymentDate;
-            $this->paymentProof = $PaymentProof;
-            $this->sender = $sender;
-            $this->referenceNumber = $referenceNumber;
+        $this->reservationId = $reservationId;
+        $this->amountPaid = $amountPaid;
+        $this->paymentDate = $paymentDate;
+        $this->paymentProof = $PaymentProof;
+        $this->sender = $sender;
+        $this->referenceNumber = $referenceNumber;
 
-            $sql = "INSERT INTO payments (ReservationID, AmountPaid, PaymentDate, PaymentProof, sender, ReferenceNumber) 
-                    VALUES ('$reservationId', '$amountPaid', '$paymentDate', '$PaymentProof', '$sender', $referenceNumber')";
-            if ($this->connection->query($sql) === TRUE) {
-                return true;
-            } else {
-                return false;
-            }
-        } catch (\Exception $e) {
-            return $e->getMessage();
+        $sql = "INSERT INTO payments (ReservationID, AmountPaid, PaymentDate, PaymentProof, sender, ReferenceNumber) 
+        VALUES ('$reservationId', '$amountPaid', '$paymentDate', '$PaymentProof', '$sender', '$referenceNumber')";
+
+        if ($this->connection->query($sql) === TRUE) {
+            return true;
+        } else {
+            return false;
         }
     }
     public function getTotalEarnings()
