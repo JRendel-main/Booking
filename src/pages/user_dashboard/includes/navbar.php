@@ -36,7 +36,7 @@
                     if (isset($_SESSION['email'])) {
                         echo '<a class="btn btn-danger" href="../../logout.php">Logout</a>';
                     } else {
-                        echo '<a class="btn btn-success" href="../index.php">Login</a>';
+                        echo '<a class="btn btn-success" href="../../index.php">Login</a>';
                     }
                     ?>
                 </li>

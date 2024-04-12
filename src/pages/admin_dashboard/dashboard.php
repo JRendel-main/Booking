@@ -29,7 +29,6 @@ if (isset($_GET['reservation'])) {
     <link href="../../../css/sb-admin-2.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.datatables.net/2.0.2/css/dataTables.dataTables.css" />
 
-
 </head>
 
 <body id="page-top">

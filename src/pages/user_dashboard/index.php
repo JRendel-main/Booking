@@ -9,6 +9,8 @@ $session = new session();
 include 'includes/header.php';
 include 'includes/navbar.php';
 ?>
-<?php
-include 'includes/footer.php'
-    ?>
+<!-- Contents here -->
+
+
+
+<?php include 'includes/footer.php' ?>
