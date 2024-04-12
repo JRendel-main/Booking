@@ -213,6 +213,7 @@ if (isset($_GET['success'])) {
                 cont_no: {
                     required: true,
                     minlength: 10,
+                    maxlength: 11,
                     digits: true
                 }
             },
