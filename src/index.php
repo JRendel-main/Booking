@@ -1,3 +1,15 @@
+<?php
+if (isset($_GET['error'])) {
+    $response = $_GET['error'];
+    echo "<script>alert('$response')</script>";
+}
+if (isset($_GET['success'])) {
+    $response = $_GET['success'];
+    echo "<script>alert('$response')</script>";
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -222,8 +234,8 @@
         // Automatically add +63 to contact number
         $('#cont_no').on('input', function() {
             var inputVal = $(this).val();
-            if (inputVal.substring(0, 3) !== "+63") {
-                $(this).val("+63" + inputVal);
+            if (inputVal.substring(0, 2) !== "09") {
+                $(this).val("09" + inputVal);
             }
         });
     });
