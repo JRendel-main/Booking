@@ -192,4 +192,16 @@ class Payment
             return array();
         }
     }
+
+    public function getPayment($reservationId)
+    {
+        $sql = "SELECT * FROM payments WHERE ReservationID = '$reservationId'";
+        $result = $this->connection->query($sql);
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            return $row;
+        } else {
+            return null;
+        }
+    }
 }

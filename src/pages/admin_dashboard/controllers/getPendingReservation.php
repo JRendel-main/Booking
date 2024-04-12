@@ -42,6 +42,18 @@ foreach ($reservations as $reservation) {
     if (strtotime($reservation['CheckInDate']) < strtotime(date('Y-m-d'))) {
         $badge = '<badge class="badge badge-pill badge-info">Finished</badge>';
     }
+
+    $payment = new Payment($connection);
+    $paymentData = $payment->getPayment($reservation['ReservationID']);
+
+    if ($paymentData == null) {
+        $referenceNumber = 'N/A';
+        $paymentProof = 'N/A';
+    } else {
+        $referenceNumber = $paymentData['ReferenceNumber'];
+        $paymentProof = $paymentData['PaymentProof'];
+    }
+
     $reservationList[] = [
         "reservation_id" => $reservation['ReservationID'],
         "reservation_date" => $date,
@@ -49,6 +61,8 @@ foreach ($reservations as $reservation) {
         "guest_name" => $fullname,
         "guest_contact" => $user_name['Phone'],
         "total_paid" => '₱ ' . $reservation['TotalAmount'],
+        "reference_number" => $referenceNumber,
+        "payment_proof" => $paymentProof,
         "status" => $badge
     ];
 }

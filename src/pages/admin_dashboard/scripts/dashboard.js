@@ -25,6 +25,7 @@ $(document).ready(function () {
                     { "data": "guest_name", title: "Guest Name" },
                     { "data": "guest_contact", title: "Guest Contact" },
                     { "data": "total_paid", title: "Total Paid" },
+                    { "data": "reference_number", title: "Reference Number" },
                     { "data": "status", title: `Status` },
                     {
                         "data": null,
@@ -33,7 +34,9 @@ $(document).ready(function () {
                             if (data.status === '<badge class=\"badge badge-pill badge-success\">Approved</badge>') {
                                 // Show "Cancel" button if status is "approved"
                                 return `
-                                <a class="btn btn-danger btn-sm cancel-booking" href="controllers/cancelReservation.php?id=${data.reservation_id}">Cancel</a>`;
+                                <a class="btn btn-danger btn-sm cancel-booking" href="controllers/cancelReservation.php?id=${data.reservation_id}">Cancel</a>
+                                <a class="btn btn-info btn-sm" href="viewPOP.php?path=${data.payment_proof}" target="_blank">View Payment</a>
+                                `;
                             } else {
                                 return `<a class="btn btn-secondary btn-sm" disabled>Cancel</a>`
                             }
@@ -91,6 +94,7 @@ $(document).ready(function () {
                     { "data": "guest_name", title: "Guest Name" },
                     { "data": "guest_contact", title: "Guest Contact" },
                     { "data": "total_paid", title: "Total Paid" },
+                    { "data": "reference_number", title: "Reference Number" },
                     { "data": "status", title: `Status` },
                     {
                         "data": null,
@@ -100,11 +104,14 @@ $(document).ready(function () {
 
                             function button() {
                                 if (data.status === '<badge class=\"badge badge-pill badge-warning\">Pending</badge>') {
-                                    return `<a class="btn btn-success btn-sm approve-booking" href="controllers/approve_reservation.php?id=${reservationId}">Approve</a>
-                                    <a class="btn btn-danger btn-sm reject-booking" href="controllers/decline_reservation.php?id=${reservationId}">Reject</a>`;
+                                    return `
+                                    <a class="btn btn-success btn-sm approve-booking" href="controllers/approve_reservation.php?id=${reservationId}">Approve</a>
+                                    <a class="btn btn-danger btn-sm reject-booking" href="controllers/decline_reservation.php?id=${reservationId}">Reject</a>
+                                    <a class="btn btn-info btn-sm" href="viewPOP.php?path=${data.payment_proof}" target="_blank">View Payment</a>
+                                    `;
                                 } else {
-                                    return `<button class="btn btn-secondary btn-sm" disabled>Approve</button>
-                                    <button class="btn btn-secondary btn-sm" disabled>Reject</button>`;
+                                    return `<button class="btn btn-secondary btn-sm" disabled> Approve</button>
+                                        <button class="btn btn-secondary btn-sm" disabled>Reject</button>`;
                                 }
                             }
                             return button();
